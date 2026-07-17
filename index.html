@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 18-Year Cycle — Summit Watch</title>
+<style>
+  :root{
+    --paper:#EDEAE0;
+    --paper-deep:#E3DFD2;
+    --ink:#21261F;
+    --ledger:#1F3D2E;
+    --ledger-soft:#2E5340;
+    --rule:#C9C3B2;
+    --stamp:#A8322A;
+    --amber:#A97B1F;
+    --quiet:#8A8674;
+    --white:#F7F5EE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important;animation:none!important}
+  }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.5;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(31,61,46,.045) 31px,rgba(31,61,46,.045) 32px);
+  }
+  .mono{font-family:'Courier New',Courier,monospace}
+
+  header{
+    background:var(--ledger);
+    color:var(--white);
+    padding:34px 24px 28px;
+    border-bottom:5px double #142A1F;
+  }
+  .head-inner{max-width:1040px;margin:0 auto;display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:space-between}
+  .head-text{max-width:520px}
+  .eyebrow{font-family:'Courier New',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#9FBFA9;margin-bottom:10px}
+  h1{font-size:clamp(26px,4vw,38px);font-weight:600;letter-spacing:.01em;line-height:1.15}
+  .head-text p{margin-top:10px;font-size:14.5px;color:#CBD9CB;max-width:46ch}
+
+  /* Gauge */
+  .gauge-wrap{text-align:center}
+  .gauge-wrap svg{display:block;margin:0 auto}
+  .gauge-caption{font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FBFA9;margin-top:6px}
+  .gauge-score{font-family:'Courier New',monospace;font-size:22px;color:var(--white);margin-top:2px}
+
+  main{max-width:1040px;margin:0 auto;padding:30px 20px 70px}
+
+  .summary{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;
+    margin-bottom:34px;
+  }
+  .sum-card{
+    background:var(--white);border:1px solid var(--rule);padding:14px 16px;
+    border-top:4px solid var(--ledger);
+  }
+  .sum-card h3{font-size:13px;font-family:'Courier New',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ledger);margin-bottom:6px}
+  .sum-count{font-size:26px;font-weight:700}
+  .sum-count small{font-size:13px;color:var(--quiet);font-weight:400}
+  .sum-bar{height:6px;background:var(--paper-deep);margin-top:8px;position:relative;overflow:hidden}
+  .sum-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ledger-soft);transition:width .35s ease}
+  .sum-bar i.hot{background:var(--stamp)}
+
+  .stage{margin-bottom:44px}
+  .stage-head{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;
+    border-bottom:3px double var(--ledger);padding-bottom:8px;margin-bottom:4px;
+  }
+  .stage-head h2{font-size:22px;color:var(--ledger);font-weight:700}
+  .stage-meta{font-family:'Courier New',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--quiet)}
+  .stage-desc{font-size:14px;color:#4A4A3F;margin:10px 0 16px;max-width:78ch}
+
+  .sign{
+    background:var(--white);
+    border:1px solid var(--rule);
+    border-left:5px solid var(--rule);
+    margin-bottom:10px;
+    padding:14px 16px 12px;
+    transition:border-color .25s ease;
+  }
+  .sign[data-status="emerging"]{border-left-color:var(--amber)}
+  .sign[data-status="confirmed"]{border-left-color:var(--stamp)}
+  .sign-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
+  .sign-num{font-family:'Courier New',monospace;font-size:12px;color:var(--quiet);min-width:38px}
+  .sign-name{font-weight:700;font-size:16.5px;flex:1;min-width:220px}
+  .tag{
+    font-family:'Courier New',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:3px 8px;border:1px solid;white-space:nowrap;align-self:center;
+  }
+  .tag.euphoric{color:var(--ledger);border-color:var(--ledger);background:rgba(31,61,46,.06)}
+  .tag.ominous{color:var(--stamp);border-color:var(--stamp);background:rgba(168,50,42,.06)}
+  .sign-desc{font-size:14px;color:#3C4136;margin-top:8px;max-width:88ch}
+  .sign-watch{font-size:13px;color:var(--quiet);margin-top:6px;max-width:88ch}
+  .sign-watch b{color:#5A5745;font-weight:700}
+  .sign-srcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .src{
+    font-family:'Courier New',monospace;font-size:11px;letter-spacing:.04em;
+    color:var(--ledger);text-decoration:none;border:1px solid var(--rule);
+    padding:4px 9px;background:var(--paper);white-space:nowrap;
+  }
+  .src:hover{border-color:var(--ledger);background:rgba(31,61,46,.07)}
+  .src:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+  .src::after{content:" ↗"}
+
+  .update-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+  .btn-update{
+    font-family:'Courier New',monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+    background:var(--white);color:var(--ledger);border:2px solid var(--white);
+    padding:10px 18px;cursor:pointer;font-weight:700;
+  }
+  .btn-update:hover{background:transparent;color:var(--white)}
+  .btn-update:disabled{opacity:.5;cursor:wait}
+  .btn-update:focus-visible{outline:2px solid #9FBFA9;outline-offset:2px}
+  .update-status{font-family:'Courier New',monospace;font-size:12px;color:#CBD9CB;letter-spacing:.06em}
+  .keyrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  .keyrow[hidden]{display:none}
+  .keyrow input{flex:1;min-width:220px;background:rgba(247,245,238,.12);border:1px solid rgba(247,245,238,.4);color:var(--white);font-family:'Courier New',monospace;font-size:12px;padding:7px 9px}
+  .keyrow input::placeholder{color:#9FBFA9}
+  .keybtn{font-family:'Courier New',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid #9FBFA9;color:#DCE8DC;padding:6px 11px;cursor:pointer}
+  .keybtn:hover{background:rgba(247,245,238,.12)}
+  .keyhint{font-family:'Courier New',monospace;font-size:11px;color:#9FBFA9;flex-basis:100%}
+  .econ{font-family:'Courier New',monospace;font-size:11px;color:#9FBFA9;flex-basis:100%;display:flex;gap:7px;align-items:center;cursor:pointer}
+  .econ input{accent-color:#9FBFA9}
+
+  .progress{display:none;align-items:center;gap:10px;margin-top:10px;max-width:420px}
+  .progress.active{display:flex}
+  .progress-track{flex:1;height:8px;background:rgba(247,245,238,.18);border:1px solid rgba(247,245,238,.35);position:relative;overflow:hidden}
+  .progress-track i{position:absolute;left:0;top:0;bottom:0;width:0;background:#9FBFA9;transition:width .4s ease}
+  .progress-pct{font-size:12px;color:var(--white);min-width:38px;text-align:right}
+
+  /* Playbook */
+  .playbook{margin:10px 0 44px;border:2px solid var(--ledger);background:var(--white)}
+  .pb-head{background:var(--ledger);color:var(--white);padding:14px 18px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline}
+  .pb-head h2{font-size:19px;font-weight:700}
+  .pb-mode{font-family:'Courier New',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border:1px solid #9FBFA9;color:#DCE8DC}
+  .pb-src{font-family:'Courier New',monospace;font-size:11px;color:#9FBFA9;margin-left:auto}
+  .pb-intro{padding:12px 18px 0;font-size:13.5px;color:#4A4A3F;max-width:96ch}
+  .pb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;padding:14px 18px 18px}
+  .pb-card{border:1px solid var(--rule);padding:12px 13px;background:var(--paper)}
+  .pb-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .pb-name{font-weight:700;font-size:15px;flex:1}
+  .pb-action{font-family:'Courier New',monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;padding:3px 9px;font-weight:700;white-space:nowrap}
+  .pb-action.a-buy{background:var(--ledger);color:var(--white)}
+  .pb-action.a-hold{background:var(--amber);color:#fff}
+  .pb-action.a-sell{background:var(--stamp);color:#fff}
+  .pb-action.a-avoid{background:transparent;color:var(--quiet);border:1px solid var(--quiet)}
+  .pb-why{font-size:13px;color:#3C4136;margin-top:7px}
+  .pb-why b{font-weight:700}
+  .pb-tickers{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+  .pb-ai{margin-top:9px;border-top:1px dashed var(--rule);padding-top:7px;font-size:12.5px;color:var(--ledger)}
+  .pb-ai .mono{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--quiet)}
+  .pb-disclaimer{padding:0 18px 16px;font-size:12px;color:var(--quiet);max-width:100ch}
+
+  .ai-panel{
+    margin-top:10px;border:1px dashed var(--ledger-soft);background:rgba(31,61,46,.05);
+    padding:10px 12px;
+  }
+  .ai-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-family:'Courier New',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ledger)}
+  .ai-verdict{padding:2px 8px;border:1px solid;font-weight:700}
+  .ai-verdict.v-none{color:var(--quiet);border-color:var(--quiet)}
+  .ai-verdict.v-emerging{color:var(--amber);border-color:var(--amber)}
+  .ai-verdict.v-confirmed{color:var(--stamp);border-color:var(--stamp)}
+  .ai-summary{font-size:13.5px;color:#33382E;margin-top:6px}
+  .ai-apply{margin-left:auto;background:none;border:1px solid var(--ledger);color:var(--ledger);font-family:'Courier New',monospace;font-size:10.5px;padding:3px 9px;cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
+  .ai-apply:hover{background:var(--ledger);color:var(--white)}
+  .sign-check{background:none;border:1px solid var(--rule);color:var(--ledger);font-family:'Courier New',monospace;font-size:11px;padding:5px 11px;cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
+  .sign-check:hover{border-color:var(--ledger)}
+  .sign-check:disabled{opacity:.5;cursor:wait}
+
+  .sign-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+  .chip{
+    font-family:'Courier New',monospace;font-size:12px;letter-spacing:.06em;
+    padding:6px 13px;border:1.5px solid var(--rule);background:transparent;color:var(--quiet);
+    cursor:pointer;text-transform:uppercase;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+  .chip.on-none{border-color:var(--ink);color:var(--ink);background:var(--paper-deep)}
+  .chip.on-emerging{border-color:var(--amber);color:#fff;background:var(--amber)}
+  .chip.on-confirmed{border-color:var(--stamp);color:#fff;background:var(--stamp)}
+  .note-toggle{margin-left:auto;background:none;border:none;font-family:'Courier New',monospace;font-size:12px;color:var(--ledger);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .note-toggle:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+  .note-area{display:none;margin-top:10px}
+  .note-area.open{display:block}
+  .note-area textarea{
+    width:100%;min-height:64px;border:1px solid var(--rule);background:var(--paper);
+    font-family:'Courier New',monospace;font-size:13px;padding:9px;color:var(--ink);resize:vertical;
+  }
+  .note-area textarea:focus-visible{outline:2px solid var(--ledger);outline-offset:1px}
+  .note-hint{font-family:'Courier New',monospace;font-size:11px;color:var(--quiet);margin-top:4px}
+
+  /* BTC 4-year cycle desk */
+  .mid-grid{display:grid;grid-template-columns:1fr;gap:14px;align-items:start;margin:10px 0 44px}
+  @media(min-width:900px){.mid-grid{grid-template-columns:minmax(0,1fr) 300px}}
+  .mid-grid .playbook{margin:0}
+  .btcdesk{border:2px solid var(--amber);background:var(--white)}
+  .btc-head{background:var(--amber);color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .btc-head h2{font-size:16px;font-weight:700}
+  .btc-phase{font-family:'Courier New',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,.7);padding:2px 8px}
+  .btc-body{padding:12px 14px 14px;font-size:13px;color:#3C4136}
+  .btc-big{font-family:'Courier New',monospace;font-size:15px;color:var(--ink);margin-bottom:2px}
+  .btc-big b{font-size:20px}
+  .btc-sub{font-family:'Courier New',monospace;font-size:11px;color:var(--quiet);margin-bottom:10px}
+  .btc-track{position:relative;height:10px;background:var(--paper-deep);border:1px solid var(--rule);overflow:hidden;margin:6px 0 4px}
+  .btc-track .peakband{position:absolute;top:0;bottom:0;background:rgba(168,50,42,.22)}
+  .btc-track i{position:absolute;left:0;top:0;bottom:0;background:var(--amber)}
+  .btc-scale{display:flex;justify-content:space-between;font-family:'Courier New',monospace;font-size:10px;color:var(--quiet);margin-bottom:10px}
+  .btc-table{width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10.5px;margin:8px 0 10px}
+  .btc-table th,.btc-table td{border-top:1px solid var(--rule);padding:4px 3px;text-align:right;color:#4A4A3F}
+  .btc-table th{color:var(--ledger);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+  .btc-table th:first-child,.btc-table td:first-child{text-align:left}
+  .btc-ai{border-top:1px dashed var(--rule);padding-top:8px;margin-top:4px;font-size:12.5px;color:var(--ledger)}
+  .btc-ai .mono{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--quiet)}
+  .btc-note{font-size:11px;color:var(--quiet);margin-top:8px}
+  .btc-sec{font-family:'Courier New',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ledger);margin:12px 0 2px;border-bottom:1px solid var(--rule);padding-bottom:3px}
+  .btc-mk{width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10.5px;margin:4px 0 4px}
+  .btc-mk td{border-top:1px solid var(--rule);padding:4px 3px;color:#4A4A3F;vertical-align:top}
+  .btc-mk td:last-child{text-align:right;white-space:nowrap}
+  .btc-mk .thr{font-size:9px;color:var(--quiet)}
+  .mkz{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:1px 6px;border:1px solid}
+  .mkz.buy{color:var(--ledger);border-color:var(--ledger)}
+  .mkz.sell{color:var(--stamp);border-color:var(--stamp)}
+  .mkz.neutral{color:var(--quiet);border-color:var(--quiet)}
+  .btc-tally{font-family:'Courier New',monospace;font-size:11px;color:#4A4A3F;margin:2px 0 4px}
+  .btc-etf{border:1px solid var(--rule);background:var(--paper);padding:8px 9px;margin-top:7px}
+  .btc-etf-top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .btc-etf-name{font-weight:700;font-size:13px;flex:1}
+  .btc-etf-why{font-size:11.5px;color:#3C4136;margin-top:5px}
+  .btc-etf .pb-tickers{margin-top:6px}
+  .pb-action.a-hedge{background:var(--amber);color:#fff}
+
+  .savebar{
+    position:fixed;bottom:14px;right:14px;background:var(--ledger);color:var(--white);
+    font-family:'Courier New',monospace;font-size:12px;padding:8px 14px;opacity:0;transition:opacity .3s;
+    pointer-events:none;letter-spacing:.08em;
+  }
+  .savebar.show{opacity:1}
+
+  footer{max-width:1040px;margin:0 auto;padding:0 20px 46px;font-size:12.5px;color:var(--quiet)}
+  footer p{max-width:82ch;margin-bottom:6px}
+  .reset{background:none;border:1px solid var(--rule);color:var(--quiet);font-family:'Courier New',monospace;font-size:11.5px;padding:6px 12px;cursor:pointer;margin-top:8px;text-transform:uppercase;letter-spacing:.08em}
+  .reset:hover{border-color:var(--stamp);color:var(--stamp)}
+  .hostguide{margin-top:14px;border:1px solid var(--rule);background:var(--white)}
+  .hostguide summary{cursor:pointer;font-family:'Courier New',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ledger);padding:10px 14px;font-weight:700}
+  .hostguide summary:hover{background:rgba(31,61,46,.05)}
+  .hostguide ol{padding:4px 14px 12px 34px;font-size:13px;color:#3C4136;max-width:88ch}
+  .hostguide li{margin-bottom:7px}
+  .hostguide li b{font-weight:700}
+  .hostguide .hg-note{padding:0 14px 12px;font-size:12px;color:var(--quiet);max-width:88ch}
+  .hostguide code{font-family:'Courier New',monospace;font-size:12px;background:var(--paper-deep);padding:1px 5px}
+  .io-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .io-row .reset{margin-top:0}
+  .io-panel{display:none;margin-top:10px}
+  .io-panel.open{display:block}
+  .io-panel textarea{width:100%;min-height:110px;border:1px solid var(--rule);background:var(--white);font-family:'Courier New',monospace;font-size:11px;padding:8px;color:var(--ink);resize:vertical}
+  .io-actions{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+  .io-actions .reset{margin-top:0}
+  .io-hint{font-family:'Courier New',monospace;font-size:11px;color:var(--quiet)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div class="head-text">
+      <div class="eyebrow">Field Ledger · The Secret Wealth Advantage · Patel</div>
+      <h1>Summit Watch</h1>
+      <p>The warning signs that precede the top of the 18-year land cycle, drawn from the Land Boom, Mania, and Summit chapters. Mark each sign as you observe it; the gauge estimates how late in the cycle conditions look.</p>
+      <div class="update-row">
+        <button class="btn-update" id="runUpdate">⟳ Run AI update</button>
+        <button class="keybtn" id="keyToggle" hidden>⚿ API key</button>
+        <span class="update-status" id="updateStatus">One click: AI researches all 28 signs, the playbook, and the BTC cycle</span>
+      </div>
+      <div class="keyrow" id="keyRow" hidden>
+        <input type="password" id="keyInput" autocomplete="off" placeholder="sk-ant-…  (saved only in this browser)" aria-label="Anthropic API key">
+        <button class="keybtn" id="keySave">Save</button>
+        <button class="keybtn" id="keyClear">Clear</button>
+        <span class="keyhint" id="keyHint"></span>
+        <label class="econ"><input type="checkbox" id="econChk"> Economy mode — Haiku model, ~3× cheaper tokens, slightly rougher verdicts</label>
+      </div>
+      <div class="progress" id="aiProgress" aria-hidden="true">
+        <div class="progress-track"><i id="aiProgressFill"></i></div>
+        <span class="progress-pct mono" id="aiPct">0%</span>
+      </div>
+    </div>
+    <div class="gauge-wrap">
+      <svg id="gauge" width="300" height="175" viewBox="0 0 300 175" role="img" aria-label="Cycle position gauge">
+        <!-- stage bands -->
+        <path d="M 30 155 A 120 120 0 0 1 68 68" fill="none" stroke="#2E5340" stroke-width="18"/>
+        <path d="M 68 68 A 120 120 0 0 1 150 35" fill="none" stroke="#4C7A5C" stroke-width="18"/>
+        <path d="M 150 35 A 120 120 0 0 1 232 68" fill="none" stroke="#A97B1F" stroke-width="18"/>
+        <path d="M 232 68 A 120 120 0 0 1 270 155" fill="none" stroke="#A8322A" stroke-width="18"/>
+        <text x="42" y="120" fill="#9FBFA9" font-size="10" font-family="Courier New, monospace">RECOVERY</text>
+        <text x="96" y="52" fill="#9FBFA9" font-size="10" font-family="Courier New, monospace">BOOM</text>
+        <text x="176" y="52" fill="#E8C888" font-size="10" font-family="Courier New, monospace">MANIA</text>
+        <text x="216" y="120" fill="#E8A29A" font-size="10" font-family="Courier New, monospace">SUMMIT</text>
+        <g id="needle" style="transform-origin:150px 155px;transition:transform .6s cubic-bezier(.4,1.4,.6,1)">
+          <line x1="150" y1="155" x2="150" y2="52" stroke="#F7F5EE" stroke-width="3"/>
+          <circle cx="150" cy="155" r="7" fill="#F7F5EE"/>
+        </g>
+      </svg>
+      <div class="gauge-score mono" id="gaugeScore">0%</div>
+      <div class="gauge-caption">Summit proximity index</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="summary" id="summary"></div>
+  <div class="mid-grid">
+    <section class="playbook" id="playbook"></section>
+    <aside class="btcdesk" id="btcdesk" aria-label="Bitcoin 4-year cycle tracker"></aside>
+  </div>
+  <div id="stages"></div>
+</main>
+
+<footer>
+  <p>Sourced from Akhil Patel, <em>The Secret Wealth Advantage</em> (chapters 10, 12 and 14). Tags show how each sign typically <em>feels</em> at the time — the book's core warning is that most pre-Summit signals read as good news. The proximity index weights Summit-stage signs most heavily, then Mania, then Land Boom.</p>
+  <p>Each card links to its live data desk: FRED and Federal Reserve series for the chartable signs, official databases where they exist (CTBUH, BIS, NAR, Census), and curated news or Google Trends searches for the signs that can only be observed, not measured. Sources open in a new tab; if a link ever goes stale, the series name is enough to find it again.</p>
+  <p>To use the AI: upload this file to claude.ai and ask Claude to "open this file as an artifact exactly as-is". "Run AI update" then researches all 28 signs with live web search and sets every status, adding a dated evidence summary to each card; further passes gather market context for the playbook and the Bitcoin cycle desk. You can override any verdict with the status chips — overridden cards are labelled. Opened as a plain file in any browser, everything works too — the AI button just needs an Anthropic API key (⚿ next to it; stored only in that browser, never in the file), and progress saves in that browser instead.</p>
+  <p>A framework for observation, not financial advice. Cycle theories fit history more neatly in hindsight than in real time.</p>
+  <details class="hostguide">
+    <summary>Put this page on the web (free, ~10 min, no coding)</summary>
+    <ol>
+      <li><b>Create a GitHub account</b> — go to <code>github.com/signup</code>, pick a username, verify your email. Free tier is all you need.</li>
+      <li><b>Make a repository</b> — click the <b>+</b> (top right) → <b>New repository</b>. Name it anything (e.g. <code>summit-watch</code>), set it to <b>Public</b>, tick <b>Add a README</b>, click <b>Create repository</b>.</li>
+      <li><b>Upload this file</b> — in the repo, click <b>Add file → Upload files</b>. Before uploading, rename your copy of this file to <code>index.html</code> (that exact name makes it the homepage). Drag it in, click <b>Commit changes</b>. Tip: use a copy made with <b>Share seeded copy</b> below if you want your current readings baked in — but remember a public page shows your notes to anyone with the link.</li>
+      <li><b>Turn on GitHub Pages</b> — repo <b>Settings → Pages</b> (left sidebar). Under "Build and deployment," set Source to <b>Deploy from a branch</b>, branch <b>main</b>, folder <b>/ (root)</b>, click <b>Save</b>.</li>
+      <li><b>Get your link</b> — wait 1–2 minutes, refresh the Pages settings page, and your site appears at <code>https://YOUR-USERNAME.github.io/summit-watch/</code>. Send that URL to anyone.</li>
+      <li><b>Update later</b> — to publish new readings, click <b>Share seeded copy</b>, rename the download to <code>index.html</code>, and upload it to the repo again (Upload files → drag → Commit). The site updates itself in a minute or two.</li>
+    </ol>
+    <p class="hg-note">On the hosted page everything works for every visitor — chips, notes, gauge, saved progress (per browser). The AI update button needs either an Anthropic API key (⚿ in the header, each visitor's own) or the page opened inside claude.ai instead. Never put an API key in the repo itself.</p>
+  </details>
+  <div class="io-row">
+    <button class="reset" id="shareBtn">Share seeded copy</button>
+    <button class="reset" id="exportBtn">Export data</button>
+    <button class="reset" id="importBtn">Import data</button>
+    <button class="reset" id="resetBtn">Reset all entries</button>
+  </div>
+  <div class="io-panel" id="ioPanel">
+    <textarea id="ioText" spellcheck="false" aria-label="Export or import data blob"></textarea>
+    <div class="io-actions">
+      <button class="reset" id="ioApply">Apply import</button>
+      <button class="reset" id="ioClose">Close</button>
+      <span class="io-hint" id="ioHint"></span>
+    </div>
+  </div>
+</footer>
+
+<div class="savebar mono" id="savebar">Saved</div>
+
+<script>
+const SEED=/*SEED-START*/null/*SEED-END*/;
+const STAGES = [
+  {
+    id:"landboom",
+    name:"Act III · The Land Boom",
+    meta:"Years ~9–12 · Prevailing emotion: confidence",
+    weight:1,
+    desc:"The broad boom of the cycle's second half. These are background conditions — each one feels like prosperity, and together they set the stage for the final act.",
+    signs:[
+      {id:"lb1",tag:"euphoric",name:"A 'new era' displacement event",
+       desc:"A shift in conditions convinces people the old rules no longer apply — this time is different.",
+       watch:"Mainstream commentary declaring a structural break with the past; the four most expensive words in investing."},
+      {id:"lb2",tag:"euphoric",name:"Boom centred on a new technology",
+       desc:"Each cycle's boom rides an epochal technology (railways, autos, internet — now AI) that genuinely raises productivity and, with it, land values.",
+       watch:"Capital flooding one transformative sector; that sector's story used to justify all asset prices."},
+      {id:"lb3",tag:"euphoric",name:"Infrastructure spending wave",
+       desc:"Governments pour money into transport, energy and urban projects, raising the value of served locations.",
+       watch:"Major public works programmes; land and property booms clustering around new infrastructure corridors."},
+      {id:"lb4",tag:"euphoric",name:"Property boom spreads to the periphery",
+       desc:"Rising prices push buyers and developers outward into secondary cities, outer suburbs and marginal locations.",
+       watch:"Price growth in secondary/tertiary markets outpacing prime areas; 'next hotspot' talk."},
+      {id:"lb5",tag:"euphoric",name:"Easy credit",
+       desc:"Lending standards loosen and credit becomes abundant, increasingly directed at property rather than production.",
+       watch:"Higher loan-to-value offers, looser underwriting, mortgage credit growing faster than incomes."},
+      {id:"lb6",tag:"ominous",name:"Government policy (and corruption) fuels the boom",
+       desc:"Tax breaks, subsidies and favours for developers and landowners amplify the speculation.",
+       watch:"Property tax incentives, zoning favours, scandals linking officials to land deals."},
+      {id:"lb7",tag:"euphoric",name:"Broad stock market boom",
+       desc:"Equities surge alongside land as prosperity and credit lift all assets.",
+       watch:"Indices repeatedly at all-time highs; retail participation broadening."},
+      {id:"lb8",tag:"euphoric",name:"The boom is global",
+       desc:"House prices rise in sync across major cities worldwide — the more integrated finance is, the more synchronised the boom.",
+       watch:"Simultaneous property booms across countries; global capital chasing real estate everywhere."},
+      {id:"lb9",tag:"euphoric",name:"Investor euphoria",
+       desc:"Widespread confidence that prices keep rising; fear of missing out replaces fear of loss.",
+       watch:"Sentiment surveys at extremes; scepticism treated as ignorance."}
+    ]
+  },
+  {
+    id:"mania",
+    name:"Act III · The Mania",
+    meta:"Years ~12–14 · Prevailing emotion: greed",
+    weight:1.6,
+    desc:"The final two years of expansion, when the cycle goes into overdrive. Patel's checklist for this stage — nearly all of it feels like triumph while it happens.",
+    signs:[
+      {id:"m1",tag:"euphoric",name:"A policy change ignites the final land surge",
+       desc:"Rate cuts, tax breaks or deregulation inadvertently tip the Land Boom into Mania; capital switches from production to land speculation.",
+       watch:"Stimulus or deregulation late in a boom; businesses and professionals pivoting into property investment."},
+      {id:"m2",tag:"ominous",name:"New and shadow lenders drive the credit surge",
+       desc:"The marginal credit comes from players outside normal regulation — non-bank financiers, offshore lenders, private credit, crypto-based finance. Bank liquidity quietly thins as loans lock into property.",
+       watch:"Rapid growth in private credit/shadow banking; novel financing vehicles regulators don't yet understand."},
+      {id:"m3",tag:"euphoric",name:"Construction everywhere; record land subdivision",
+       desc:"Building surges, especially in marginal outer areas; small builders and subcontractors pile in. Land subdivision goes to greater excess than any other variable in the cycle.",
+       watch:"Cranes on every skyline; permits and subdivisions at records; overbuilding in low-demand areas."},
+      {id:"m4",tag:"euphoric",name:"Stocks at extreme valuations, led by construction and banks",
+       desc:"The market surges to all-time highs led by the two boom sectors; new investment fads absorb the flood of money; the savings rate falls as people feel rich.",
+       watch:"Valuation multiples at historic extremes; hot new investment vehicles; falling household savings rate."},
+      {id:"m5",tag:"euphoric",name:"A record-breaking 'world's tallest/largest' is announced",
+       desc:"The skyscraper indicator: monuments of cheap, careless credit. Empire State (1929), Sears Tower (1970), Burj Khalifa (2004) — all announced in their cycles' final years.",
+       watch:"Announcements of record towers or megaprojects of unprecedented scale and ambition."},
+      {id:"m6",tag:"ominous",name:"Inflation and interest rates rise",
+       desc:"Money chasing land instead of production shows up as inflation; bond yields and borrowing costs climb, squeezing business.",
+       watch:"CPI trending up late in the boom; short-term yields rising; loan pricing increasing."},
+      {id:"m7",tag:"ominous",name:"The yield curve inverts",
+       desc:"Patel treats this with 'utmost respect' this late in the cycle: on average just over 14 months from inversion to recession. Most dismiss it as broken this time.",
+       watch:"Short rates above long rates; commentary explaining why the signal no longer applies."},
+      {id:"m8",tag:"euphoric",name:"Everyone is talking property",
+       desc:"The taxi-driver test: hairdressers and doctors trade tips, TV teaches flipping, dinner parties debate the next hotspot, agents drive flash cars.",
+       watch:"Property speculation as mass entertainment; amateurs quitting jobs to invest."},
+      {id:"m9",tag:"euphoric",name:"Record auctions and extravagant behaviour",
+       desc:"Newly minted billionaires bid collectibles to record prices — the van Gogh in 1990, the Picasso in 2004. Assets with no income are the purest expression of the mania.",
+       watch:"Record art/collectible sales; conspicuous trophy purchases making headlines."}
+    ]
+  },
+  {
+    id:"summit",
+    name:"Act IV approaches · The Summit",
+    meta:"Year ~14 · Prevailing emotion: delusion · 'Nobody rings a bell at the top'",
+    weight:2.2,
+    desc:"The top itself. The surface signs are dazzling — that is the trap. Underneath, the turn has already begun. Patel: once prices stop rising, they cannot plateau; they must fall.",
+    signs:[
+      {id:"s1",tag:"euphoric",name:"The grand declaration: 'prices will never fall'",
+       desc:"A media-savvy figure declares property and assets can only go up; leaders are lauded for masterful economic management; former sceptics capitulate and buy.",
+       watch:"'New paradigm' and 'great moderation' rhetoric; bears publicly converting to bulls."},
+      {id:"s2",tag:"euphoric",name:"The economy looks superb on every surface metric",
+       desc:"Record profits, strong hiring, flush tax receipts, markets at highs. Patel's point: this is what the top looks like — the good news IS the signal, because everyone is now fully invested.",
+       watch:"Uniformly strong headline data with no spare money on the sidelines; universal optimism."},
+      {id:"s3",tag:"ominous",name:"High costs quietly squeeze; spending softens",
+       desc:"Rents, prices and interest costs bite. Consumer spending 'mysteriously' weakens and business investment declines even as headlines stay strong.",
+       watch:"Retail sales and capex rolling over while sentiment and markets remain high."},
+      {id:"s4",tag:"ominous",name:"Banks are fully loaned up; credit growth slows",
+       desc:"Credit is locked in illiquid property; fast-growing lenders lean on short-term money-market funding; deposit rates rise to attract cash. All it takes to burst a credit bubble is for loan growth to slow.",
+       watch:"Decelerating lending growth; banks bidding up deposits; reliance on wholesale funding."},
+      {id:"s5",tag:"ominous",name:"Housing sales volumes fall; land prices peak",
+       desc:"The first hard signal: sellers still ask high prices, buyers stop meeting them, so volumes drop before prices do. Peripheral, overbuilt areas fall first. Land peaks 12–36 months before the recession.",
+       watch:"Falling transaction counts; lengthening time-on-market; price cuts in fringe areas."},
+      {id:"s6",tag:"ominous",name:"Housebuilder stocks diverge from the index",
+       desc:"While the broad market makes new highs, housebuilder and real-estate stocks trend down — their investors no longer believe in rising profits. Patel flags this divergence as a key Summit tell, US market especially.",
+       watch:"Homebuilder/REIT indices making lower highs while the S&P makes new highs."},
+      {id:"s7",tag:"euphoric",name:"Commercial property still booms after housing cools",
+       desc:"The second of the cycle's two real-estate peaks: surging non-residential construction masks the residential slowdown and keeps economic data looking solid.",
+       watch:"Office/industrial development and lending accelerating while homebuilding contracts."},
+      {id:"s8",tag:"ominous",name:"Central banks hike and promise a 'soft landing'",
+       desc:"Rates rise to cool the overheat, but land prices have already peaked — there can be no soft landing. The tightening eventually forces the fall.",
+       watch:"Hiking cycles paired with official soft-landing assurances; 'recession risk has receded'."},
+      {id:"s9",tag:"ominous",name:"A left-field trigger; smart money quietly sells",
+       desc:"A seemingly trivial event — a fraud, an accident, a storm — in a peripheral place causes losses. Older, experienced investors begin selling quietly, and markets dip because no spare cash remains to absorb it.",
+       watch:"An odd, dismissed piece of bad news from the fringe; insider selling and cash-raising by veterans."},
+      {id:"s10",tag:"ominous",name:"Officials downplay problems; the public is distracted",
+       desc:"Emerging cracks are minimised or concealed; attention is steered to other stories because no one in authority wants to name the turn.",
+       watch:"Reassurances that troubles are 'contained'; whistle-blowers dismissed or suppressed."}
+    ]
+  }
+];
+
+// Live data desk: authoritative sources per sign. News-search links cover the
+// qualitative signs that have no chartable series.
+const NEWS=q=>`https://news.google.com/search?q=${encodeURIComponent(q)}`;
+const FRED=id=>`https://fred.stlouisfed.org/series/${id}`;
+const SOURCES={
+  lb1:[{t:"News · 'new era' talk",u:NEWS('"new era" economy "this time is different"')}],
+  lb2:[{t:"News · AI capex boom",u:NEWS("AI capital spending data centers investment")},{t:"Nasdaq 100",u:"https://finance.yahoo.com/quote/%5ENDX"}],
+  lb3:[{t:"FRED · Public construction $",u:FRED("TLPBLCONS")},{t:"Census · construction spending",u:"https://www.census.gov/construction/c30/c30index.html"}],
+  lb4:[{t:"Zillow · metro-level data",u:"https://www.zillow.com/research/data/"},{t:"News · secondary-city booms",u:NEWS("housing boom secondary cities prices")}],
+  lb5:[{t:"Fed · loan officer survey (SLOOS)",u:"https://www.federalreserve.gov/data/sloos.htm"},{t:"FRED · 30y mortgage rate",u:FRED("MORTGAGE30US")}],
+  lb6:[{t:"News · developer tax breaks",u:NEWS("property developer tax break subsidy zoning")}],
+  lb7:[{t:"S&P 500",u:"https://finance.yahoo.com/quote/%5EGSPC"},{t:"Shiller CAPE",u:"https://www.multpl.com/shiller-pe"}],
+  lb8:[{t:"BIS · global property prices",u:"https://www.bis.org/statistics/pp.htm"},{t:"IMF · global house price index",u:"https://www.imf.org/external/research/housing/"}],
+  lb9:[{t:"AAII sentiment survey",u:"https://www.aaii.com/sentimentsurvey"},{t:"CNN Fear & Greed",u:"https://www.cnn.com/markets/fear-and-greed"}],
+  m1:[{t:"Fed · policy statements",u:"https://www.federalreserve.gov/monetarypolicy.htm"},{t:"News · housing stimulus/deregulation",u:NEWS("housing deregulation tax cut stimulus property")}],
+  m2:[{t:"FSB · non-bank finance monitor",u:"https://www.fsb.org/work-of-the-fsb/financial-innovation-and-structural-change/non-bank-financial-intermediation/"},{t:"News · private credit growth",u:NEWS("private credit boom shadow banking real estate lending")}],
+  m3:[{t:"FRED · building permits",u:FRED("PERMIT")},{t:"FRED · housing starts",u:FRED("HOUST")},{t:"FRED · total construction $",u:FRED("TTLCONS")}],
+  m4:[{t:"Shiller CAPE",u:"https://www.multpl.com/shiller-pe"},{t:"FRED · savings rate",u:FRED("PSAVERT")},{t:"Homebuilders ETF (XHB)",u:"https://finance.yahoo.com/quote/XHB"}],
+  m5:[{t:"CTBUH · Skyscraper Center",u:"https://www.skyscrapercenter.com"},{t:"News · record tower announced",u:NEWS("world's tallest building announced")}],
+  m6:[{t:"FRED · CPI",u:FRED("CPIAUCSL")},{t:"FRED · fed funds rate",u:FRED("FEDFUNDS")},{t:"FRED · 10y Treasury",u:FRED("DGS10")}],
+  m7:[{t:"FRED · 10y–2y spread",u:FRED("T10Y2Y")},{t:"FRED · 10y–3m spread",u:FRED("T10Y3M")}],
+  m8:[{t:"Google Trends · 'investment property'",u:"https://trends.google.com/trends/explore?q=investment%20property"},{t:"Trends · 'how to flip houses'",u:"https://trends.google.com/trends/explore?q=how%20to%20flip%20houses"}],
+  m9:[{t:"Hagerty Market Rating",u:"https://www.hagerty.com/apps/valuationtools/market-trends/market-rating"},{t:"Card Ladder index",u:"https://www.cardladder.com/indexes"},{t:"GoCollect · comic indices",u:"https://gocollect.com/market-data"},{t:"Knight Frank KFLII",u:"https://www.knightfrank.com/wealthreport"},{t:"News · auction records",u:NEWS("auction record price art collectible sold")}],
+  s1:[{t:"News · 'soft landing' / new-era claims",u:NEWS('"soft landing" OR "new era" economy prices')}],
+  s2:[{t:"FRED · unemployment",u:FRED("UNRATE")},{t:"FRED · corporate profits",u:FRED("CP")}],
+  s3:[{t:"FRED · retail sales",u:FRED("RSAFS")},{t:"BEA · GDP & investment",u:"https://www.bea.gov/data/gdp/gross-domestic-product"}],
+  s4:[{t:"Fed · H.8 bank credit",u:"https://www.federalreserve.gov/releases/h8/current/"},{t:"FRED · total bank credit",u:FRED("TOTBKCR")}],
+  s5:[{t:"NAR · existing-home sales",u:"https://www.nar.realtor/research-and-statistics/housing-statistics/existing-home-sales"},{t:"FRED · new homes sold",u:FRED("HSN1F")},{t:"FRED · months' supply",u:FRED("MSACSR")}],
+  s6:[{t:"Homebuilders ETF (ITB)",u:"https://finance.yahoo.com/quote/ITB"},{t:"XHB",u:"https://finance.yahoo.com/quote/XHB"},{t:"S&P 500 (compare)",u:"https://finance.yahoo.com/quote/%5EGSPC"}],
+  s7:[{t:"FRED · nonresidential construction $",u:FRED("TLNRESCONS")},{t:"FRED · residential construction $",u:FRED("TLRESCONS")}],
+  s8:[{t:"Fed · policy statements",u:"https://www.federalreserve.gov/monetarypolicy.htm"},{t:"News · 'soft landing' assurances",u:NEWS('central bank "soft landing" rate hikes')}],
+  s9:[{t:"News · fraud / left-field losses",u:NEWS("fraud losses fund collapse property lender")},{t:"News · insider selling",u:NEWS("insider selling record executives stock")}],
+  s10:[{t:"News · 'risks contained'",u:NEWS('"contained" risks financial officials reassure')}]
+};
+
+const KEY="summit-watch-v1";
+let state={}; // {signId:{status:'none'|'emerging'|'confirmed',note:''}}
+let saveTimer=null;
+
+function getSign(id){ return state[id]||(state[id]={status:"none",note:""}); }
+
+const hasCloud=()=>{try{return !!(window.storage&&typeof window.storage.get==="function");}catch(e){return false;}};
+async function load(){
+  let hadStored=false;
+  if(hasCloud()){
+    try{
+      const r=await window.storage.get(KEY);
+      if(r&&r.value){state=JSON.parse(r.value)||{};hadStored=true;}
+    }catch(e){}
+  }else{
+    try{
+      const raw=localStorage.getItem(KEY);
+      if(raw!==null){state=JSON.parse(raw)||{};hadStored=true;}
+    }catch(e){}
+  }
+  if(!hadStored&&SEED){
+    try{state=sanitizeState(SEED);flash("Loaded shared snapshot");}catch(e){state={};}
+  }
+  render();
+}
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    try{
+      if(hasCloud()) await window.storage.set(KEY,JSON.stringify(state));
+      else localStorage.setItem(KEY,JSON.stringify(state));
+      flash("Saved");
+    }catch(e){ flash("Saved for this session only"); }
+  },500);
+}
+function flash(msg){
+  const b=document.getElementById("savebar");
+  b.textContent=msg;b.classList.add("show");
+  setTimeout(()=>b.classList.remove("show"),1400);
+}
+
+function stageStats(st){
+  let pts=0,confirmed=0,emerging=0;
+  st.signs.forEach(s=>{
+    const g=getSign(s.id);
+    if(g.status==="confirmed"){pts+=1;confirmed++;}
+    else if(g.status==="emerging"){pts+=0.5;emerging++;}
+  });
+  return {pts,confirmed,emerging,max:st.signs.length};
+}
+
+function updateGauge(){
+  let score=0,max=0;
+  STAGES.forEach(st=>{
+    const s=stageStats(st);
+    score+=s.pts*st.weight;
+    max+=s.max*st.weight;
+  });
+  const pct=max?Math.round(100*score/max):0;
+  const angle=-90+180*(pct/100);
+  document.getElementById("needle").style.transform=`rotate(${angle}deg)`;
+  document.getElementById("gaugeScore").textContent=pct+"%";
+  renderPlaybook();
+  // summary cards
+  const sum=document.getElementById("summary");
+  sum.innerHTML=STAGES.map(st=>{
+    const s=stageStats(st);
+    const p=Math.round(100*s.pts/s.max);
+    return `<div class="sum-card">
+      <h3>${st.name.split("·")[1].trim()}</h3>
+      <div class="sum-count">${s.confirmed}<small> / ${s.max} confirmed${s.emerging?` · ${s.emerging} emerging`:""}</small></div>
+      <div class="sum-bar"><i class="${p>=60?"hot":""}" style="width:${p}%"></i></div>
+    </div>`;
+  }).join("");
+}
+
+function render(){
+  const wrap=document.getElementById("stages");
+  wrap.innerHTML=STAGES.map(st=>`
+    <section class="stage">
+      <div class="stage-head">
+        <h2>${st.name}</h2>
+        <span class="stage-meta">${st.meta}</span>
+      </div>
+      <p class="stage-desc">${st.desc}</p>
+      ${st.signs.map((s,i)=>{
+        const g=getSign(s.id);
+        return `<article class="sign" data-status="${g.status}" data-id="${s.id}">
+          <div class="sign-top">
+            <span class="sign-num mono">${st.id==="landboom"?"LB":st.id==="mania"?"M":"S"}·${String(i+1).padStart(2,"0")}</span>
+            <span class="sign-name">${s.name}</span>
+            <span class="tag ${s.tag}">${s.tag==="euphoric"?"Feels like good news":"Feels like bad news"}</span>
+          </div>
+          <p class="sign-desc">${s.desc}</p>
+          <p class="sign-watch"><b>Watch for:</b> ${s.watch}</p>
+          ${(SOURCES[s.id]||[]).length?`<div class="sign-srcs">${SOURCES[s.id].map(l=>`<a class="src" href="${l.u}" target="_blank" rel="noopener">${l.t}</a>`).join("")}</div>`:""}
+          <div class="sign-controls">
+            <button class="chip ${g.status==="none"?"on-none":""}" data-set="none" aria-pressed="${g.status==="none"}">Not seen</button>
+            <button class="chip ${g.status==="emerging"?"on-emerging":""}" data-set="emerging" aria-pressed="${g.status==="emerging"}">Emerging</button>
+            <button class="chip ${g.status==="confirmed"?"on-confirmed":""}" data-set="confirmed" aria-pressed="${g.status==="confirmed"}">Confirmed</button>
+            <button class="note-toggle" data-note>${g.note?"Notes ✎":"Add note"}</button>
+          </div>
+          ${g.ai?`<div class="ai-panel">
+            <div class="ai-head">
+              <span>AI research · ${g.ai.at}</span>
+              <span class="ai-verdict v-${g.ai.v}">${g.ai.v}</span>
+              ${g.status!==g.ai.v?`<span style="color:var(--quiet)">manually overridden</span>`:""}
+            </div>
+            <p class="ai-summary">${escapeHtml(g.ai.s)}</p>
+          </div>`:""}
+          <div class="note-area${g.note?" open":""}">
+            <textarea placeholder="Evidence, dates, links…" aria-label="Notes for ${s.name}">${g.note?escapeHtml(g.note):""}</textarea>
+            <div class="note-hint">Saved automatically.</div>
+          </div>
+        </article>`;
+      }).join("")}
+    </section>`).join("");
+
+  wrap.querySelectorAll(".sign").forEach(el=>{
+    const id=el.dataset.id;
+    el.querySelectorAll(".chip").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        getSign(id).status=btn.dataset.set;
+        scheduleSave();render();updateGauge();
+      });
+    });
+    el.querySelector("[data-note]").addEventListener("click",()=>{
+      el.querySelector(".note-area").classList.toggle("open");
+    });
+    el.querySelector("textarea").addEventListener("input",e=>{
+      getSign(id).note=e.target.value;
+      scheduleSave();
+    });
+  });
+  updateGauge();
+  renderBtc();
+}
+
+function escapeHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+/* ---------- The book's playbook, mapped to instruments ---------- */
+/* Actions come from the Handbook of Wealth Secrets parts 10–14. Which action
+   shows depends on the gauge: <40% Land Boom mode, 40–69% Mania mode,
+   70%+ Summit mode. */
+const YQ=t=>`https://finance.yahoo.com/quote/${encodeURIComponent(t)}`;
+const PLAYBOOK=[
+  {id:"broad", name:"Broad equities",
+   tickers:[["SPY",YQ("SPY")],["VTI",YQ("VTI")]],
+   lb:{a:"buy",w:"Part 10: 'continue to buy stocks' through the Land Boom — the strongest growth phase of the whole cycle."},
+   ma:{a:"hold",w:"Part 12: rein back. No new buying; build reserves and let winners run without adding."},
+   su:{a:"sell",w:"Part 14: the last moment to sell and move largely to cash before the Crash."}},
+  {id:"moat", name:"Rent & moat companies",
+   tickers:[["QQQ",YQ("QQQ")],["PAVE",YQ("PAVE")],["GNR",YQ("GNR")]],
+   lb:{a:"buy",w:"Parts 4 & 11: own businesses with digital, natural or legal moats, plus natural resources and infrastructure — the rent-collectors."},
+   ma:{a:"hold",w:"Hold existing moat positions; stop adding at mania prices."},
+   su:{a:"sell",w:"Even quality rent-collectors fall in the Crash; the book prioritises cash and bonds here."}},
+  {id:"restocks", name:"Real estate stocks & builders",
+   tickers:[["VNQ",YQ("VNQ")],["ITB",YQ("ITB")],["XHB",YQ("XHB")]],
+   lb:{a:"buy",w:"Ride the Land Boom's core sector while it leads the market."},
+   ma:{a:"sell",w:"Part 12/14: sell real estate stocks FIRST — they top out and trend down before the broad index does."},
+   su:{a:"sell",w:"Part 14: should already be sold; the housebuilder-vs-index divergence is itself a Summit signal."}},
+  {id:"banks", name:"Banks & financials",
+   tickers:[["XLF",YQ("XLF")],["KBE",YQ("KBE")]],
+   lb:{a:"buy",w:"Part 8: 'banks exploit the law of economic rent; own one' — they gear directly to the land boom."},
+   ma:{a:"hold",w:"Late-cycle banks are earning peak fees; hold but watch lending growth closely."},
+   su:{a:"sell",w:"Part 14: exit, and note the most indebted, fastest-expanded banks are the book's prime short candidates in the Crash."}},
+  {id:"property", name:"Physical property",
+   tickers:[],
+   lb:{a:"buy",w:"Parts 10–11: buy well-located property where new infrastructure is going in; the effortless return is strongest here."},
+   ma:{a:"hold",w:"Part 12: stop buying, pay down debt, avoid speculative borrowing. Developers: sell stock fast."},
+   su:{a:"hold",w:"Part 14: usually too late to sell — hold quality assets, lock in good tenants, cut leverage so no refinancing is needed for 2–4 years."}},
+  {id:"commod", name:"Commodities",
+   tickers:[["PDBC",YQ("PDBC")],["CPER",YQ("CPER")],["XLE",YQ("XLE")]],
+   lb:{a:"buy",w:"Part 10: buy commodities through the Land Boom as construction demand surges."},
+   ma:{a:"hold",w:"Keep holdings; commodities stay strong while building continues."},
+   su:{a:"hold",w:"Part 14: continue to hold — commodities tend to peak AFTER the stock market."}},
+  {id:"gold", name:"Gold & silver (incl. physical)",
+   tickers:[["GLD",YQ("GLD")],["SLV",YQ("SLV")],["IAU",YQ("IAU")]],
+   lb:{a:"buy",w:"Part 10: accumulate gold alongside commodities. Physical bullion (coins/bars from reputable dealers) counts."},
+   ma:{a:"buy",w:"Part 14 prep: 'if you have not already, put some of your portfolio into gold and silver.'"},
+   su:{a:"hold",w:"Hold or add — the book expects a further boost during the crisis as the flight to safety hits."}},
+  {id:"bonds", name:"Government bonds",
+   tickers:[["TLT",YQ("TLT")],["IEF",YQ("IEF")],["SHY",YQ("SHY")]],
+   lb:{a:"avoid",w:"Growth assets dominate this phase; bonds are the book's late-cycle tool."},
+   ma:{a:"buy",w:"Begin building: yields are rising toward their cycle highs as central banks tighten."},
+   su:{a:"buy",w:"Part 14: buy at high yields/low prices — the Crash's flight to quality delivers income plus capital gain. Direct Treasuries work too."}},
+  {id:"cash", name:"Cash, USD & safe havens",
+   tickers:[["SGOV",YQ("SGOV")],["UUP",YQ("UUP")],["FXY",YQ("FXY")],["FXF",YQ("FXF")]],
+   lb:{a:"avoid",w:"Part 10 has you long other currencies and short the USD during the global boom; minimal idle cash."},
+   ma:{a:"buy",w:"Part 12: build cash reserves now — dry powder is the whole point of seeing the top coming."},
+   su:{a:"buy",w:"Part 14: rotate into USD, yen and Swiss franc; in the Crash, everyone needs dollars. Cash funds the once-a-cycle buying at the Start."}},
+  {id:"collect", name:"Art, wine, cars, cards & collectibles",
+   tickers:[["Hagerty rating","https://www.hagerty.com/apps/valuationtools/market-trends/market-rating"],["Card Ladder","https://www.cardladder.com/indexes"],["GoCollect","https://gocollect.com/market-data"],["KFLII","https://www.knightfrank.com/wealthreport"]],
+   lb:{a:"buy",w:"Part 10: alternative assets ride the boom's wealth effect."},
+   ma:{a:"sell",w:"Stop buying; record auction prices are themselves a mania signal (M·09). Watch volume before price: sell-through rates and grading-submission counts roll over first — same mechanism as housing (S·05)."},
+   su:{a:"sell",w:"Part 14: 'sell fine art, wine and other collectibles immediately' — no-income assets fall hardest with no bidders."}}
+];
+
+function pbMode(pct){
+  if(pct>=70)return{key:"su",label:"Summit mode",desc:"The gauge reads late-cycle. The book's Part 14 stance: protect, don't accumulate — sell risk assets, buy bonds and safe havens, hold hard assets, and sit on cash for the next cycle's Start."};
+  if(pct>=40)return{key:"ma",label:"Mania mode",desc:"The gauge reads mania-stage. The book's Part 12 stance: stop new buying, build reserves, pay down debt, and start exiting real-estate-linked stocks first."};
+  return{key:"lb",label:"Land Boom mode",desc:"The gauge reads mid-boom. The book's Parts 10–11 stance: stay invested — equities, property near infrastructure, commodities, gold, moat businesses."};
+}
+
+function currentPct(){
+  let score=0,max=0;
+  STAGES.forEach(st=>{const s=stageStats(st);score+=s.pts*st.weight;max+=s.max*st.weight;});
+  return max?Math.round(100*score/max):0;
+}
+
+function renderPlaybook(){
+  const pct=currentPct();
+  const mode=pbMode(pct);
+  const pb=state._pb||null;
+  const AL={buy:"Buy / accumulate",hold:"Hold",sell:"Sell / reduce",avoid:"Avoid / minimal"};
+  document.getElementById("playbook").innerHTML=`
+    <div class="pb-head">
+      <h2>The Book's Playbook</h2>
+      <span class="pb-mode">${mode.label} · gauge ${pct}%</span>
+      <span class="pb-src">${pb?`AI market context · ${pb.at}`:"Run AI update for live market context"}</span>
+    </div>
+    <p class="pb-intro">${mode.desc} Actions switch automatically as the gauge moves.</p>
+    <div class="pb-grid">
+      ${PLAYBOOK.map(c=>{
+        const rec=c[mode.key];
+        const note=pb&&pb.notes&&pb.notes[c.id]?pb.notes[c.id]:null;
+        return `<div class="pb-card">
+          <div class="pb-top">
+            <span class="pb-name">${c.name}</span>
+            <span class="pb-action a-${rec.a}">${AL[rec.a]}</span>
+          </div>
+          <p class="pb-why">${rec.w}</p>
+          ${c.tickers.length?`<div class="pb-tickers">${c.tickers.map(t=>`<a class="src" href="${t[1]}" target="_blank" rel="noopener">${t[0]}</a>`).join("")}</div>`:""}
+          ${note?`<div class="pb-ai"><span class="mono">AI context</span> · ${escapeHtml(note)}</div>`:""}
+        </div>`;
+      }).join("")}
+    </div>
+    <p class="pb-disclaimer">This panel restates Akhil Patel's published playbook and maps it to example instruments for research — it is not personalised financial advice, and I'm not a financial adviser. The tickers are common, liquid examples of each category, not endorsements. Cycle timing is contested; position sizing, taxes and your own circumstances matter more than any framework.</p>`;
+}
+
+function playbookPrompt(){
+  const today=new Date().toISOString().slice(0,10);
+  const list=PLAYBOOK.map(c=>`- id "${c.id}": ${c.name}`).join("\n");
+  return `Today is ${today}. Use web search to gather CURRENT market context for each asset class below (prices/levels, recent trend, one relevant recent fact). Keep each note factual and neutral — no buy/sell advice.
+
+Asset classes:
+${list}
+
+Respond with ONLY a JSON object, no preamble, no markdown fences:
+{"<id>":"<max 20 words of current context with a concrete figure>", ...}
+Include every id.`;
+}
+
+/* ---------- Bitcoin 4-year cycle desk ---------- */
+const BTC_HALVINGS=[
+  {n:"1st",date:"Nov '12",peak:"$1,150",days:368,dd:"-83%"},
+  {n:"2nd",date:"Jul '16",peak:"$19.7k",days:525,dd:"-84%"},
+  {n:"3rd",date:"May '20",peak:"$69k",days:549,dd:"-77%"},
+  {n:"4th",date:"Apr '24",peak:"$126k",days:534,dd:"ongoing"}
+];
+const BTC_LAST_HALVING=new Date("2024-04-20T00:00:00Z");
+const BTC_NEXT_EST=new Date("2028-04-15T00:00:00Z");
+const BTC_MARKERS=[
+  {id:"mvrv",name:"MVRV Z-Score",thr:"buy <1 · sell >2.5–3.5"},
+  {id:"nupl",name:"NUPL",thr:"buy <0 · sell >0.75"},
+  {id:"ma200w",name:"Price vs 200W MA",thr:"buy at/near · sell stretched"},
+  {id:"pi",name:"Pi Cycle Top",thr:"sell on 111d > 2×350d"},
+  {id:"rsi",name:"Weekly RSI",thr:"buy <30 · sell >70"},
+  {id:"fg",name:"Fear & Greed",thr:"buy <25 · sell >75"}
+];
+/* Stance-conditional instrument map. Restates how cycle traders use these
+   products at each stance — descriptive, not personalised advice. */
+const BTC_ETFS=[
+  {name:"Spot BTC ETFs",tickers:["IBIT","FBTC","BITB"],
+   acc:{a:"buy",w:"Framework: accumulate when 3+ bottom signals converge (MVRV <1, extreme fear, 200W MA tag). The DCA-friendly core exposure."},
+   neu:{a:"hold",w:"No convergence either way — hold / continue planned DCA. The framework claims no edge here."},
+   dis:{a:"sell",w:"Framework: scale out as top signals converge (MVRV Z hot, NUPL >0.75, RSI >70). Spot is what cycle traders trim first."}},
+  {name:"2× Long BTC (leveraged)",tickers:["BITX","BITU"],
+   acc:{a:"avoid",w:"Daily-reset volatility decay bleeds multi-month holds even when direction is right. Trade-only instrument — not an accumulation vehicle."},
+   neu:{a:"avoid",w:"Sideways chop is the worst regime for daily-reset products: decay compounds with no trend to pay for it."},
+   dis:{a:"avoid",w:"Leveraged long into converged top signals is the framework's single worst trade."}},
+  {name:"Inverse / short BTC",tickers:["BITI","SBIT"],
+   acc:{a:"avoid",w:"Shorting converged bottom signals fights the framework — and inverse funds carry the same daily-reset decay."},
+   neu:{a:"avoid",w:"No signal, no hedge. Decay costs accrue while you wait."},
+   dis:{a:"hedge",w:"How traders express top signals without selling taxable spot: a small, time-boxed hedge. Decay still applies — think weeks, not quarters."}},
+  {name:"Long proxy stocks",tickers:["MSTR","MARA","RIOT","CLSK","COIN"],
+   acc:{a:"buy",w:"Balance-sheet (MSTR) and operational (miners) leverage historically outruns spot off cycle bottoms — 2–3× BTC's move. But it's equity, not BTC: dilution, energy costs, and miner bankruptcy risk in extended bears. For MSTR, check the mNAV premium first — buying above ~2× NAV pays double for the same coins."},
+   neu:{a:"hold",w:"High beta with no cycle signal is company-specific risk without cycle edge. Hold existing positions; premium/discount to NAV matters more than direction here."},
+   dis:{a:"sell",w:"Proxies fall hardest and first — the framework trims leveraged equities before spot. Miner margins collapse fastest when price rolls over into fixed costs."}},
+  {name:"Short-proxy / bear income",tickers:["WNTR"],
+   acc:{a:"avoid",w:"Shorting high-beta proxies at converged bottom signals is the max-pain trade of the whole map."},
+   neu:{a:"avoid",w:"Options-based inverse products bleed on chop; no signal means paying decay for nothing."},
+   dis:{a:"hedge",w:"WNTR (options-based inverse-MSTR income) or outright puts on MSTR/MARA are how bears express distribution with defined cost. Path-dependent and capped — a hedge, not a position."}}
+];
+function btcStance(){
+  const m=state._btc&&state._btc.markers?state._btc.markers:null;
+  if(!m)return{k:"neu",label:"Awaiting signal data",has:false,buys:0,sells:0,neut:BTC_MARKERS.length};
+  let buys=0,sells=0,neut=0;
+  BTC_MARKERS.forEach(x=>{const z=m[x.id]&&m[x.id].z;if(z==="buy")buys++;else if(z==="sell")sells++;else neut++;});
+  if(buys>=3&&buys>sells)return{k:"acc",label:"Accumulation stance",has:true,buys,sells,neut};
+  if(sells>=3&&sells>buys)return{k:"dis",label:"Distribution stance",has:true,buys,sells,neut};
+  return{k:"neu",label:"Neutral / mixed",has:true,buys,sells,neut};
+}
+function btcPhase(days){
+  if(days<=180)return"Post-halving base";
+  if(days<=560)return"Expansion / peak window";
+  if(days<=1000)return"Correction / bear";
+  return"Accumulation (pre-halving)";
+}
+function renderBtc(){
+  const el=document.getElementById("btcdesk");
+  if(!el)return;
+  const days=Math.floor((new Date()-BTC_LAST_HALVING)/86400000);
+  const total=Math.round((BTC_NEXT_EST-BTC_LAST_HALVING)/86400000);
+  const pct=Math.min(100,Math.round(100*days/total));
+  const b=state._btc||null;
+  const mk=b&&b.markers?b.markers:null;
+  const st=btcStance();
+  const phaseShown=b&&b.phase?b.phase:btcPhase(days);
+  const bandL=100*368/total, bandW=100*(549-368)/total; // historical peak window
+  const BAL={buy:"Accumulate",hold:"Hold / DCA",sell:"Reduce",avoid:"Avoid",hedge:"Hedge only"};
+  el.innerHTML=`
+    <div class="btc-head"><h2>₿ 4-Year Cycle</h2><span class="btc-phase">${escapeHtml(String(phaseShown))}</span></div>
+    <div class="btc-body">
+      <div class="btc-big"><b>${days}</b> days post-halving</div>
+      <div class="btc-sub">4th halving Apr 2024 · next ~Apr 2028 · ${pct}% through</div>
+      <div class="btc-track"><span class="peakband" style="left:${bandL}%;width:${bandW}%"></span><i style="width:${pct}%"></i></div>
+      <div class="btc-scale"><span>halving</span><span>hist. peaks 368–549d</span><span>next</span></div>
+      <table class="btc-table">
+        <tr><th>Halving</th><th>Peak</th><th>Days</th><th>Draw</th></tr>
+        ${BTC_HALVINGS.map(h=>`<tr><td>${h.n} ${h.date}</td><td>${h.peak}</td><td>${h.days}</td><td>${h.dd}</td></tr>`).join("")}
+      </table>
+      <div class="btc-sec">Cycle markers</div>
+      <table class="btc-mk">
+        ${BTC_MARKERS.map(x=>{
+          const r=mk&&mk[x.id]?mk[x.id]:null;
+          const z=r?r.z:"neutral";
+          return `<tr><td>${x.name}<br><span class="thr">${x.thr}</span></td><td>${r?escapeHtml(r.v):"—"} <span class="mkz ${z}">${z}</span></td></tr>`;
+        }).join("")}
+      </table>
+      <div class="btc-tally">${st.has?`Tally: ${st.buys} buy · ${st.neut} neutral · ${st.sells} sell`:"Run AI update to score the markers"}</div>
+      <div class="btc-sec">ETF & proxy map · ${st.label}</div>
+      ${BTC_ETFS.map(c=>{
+        const rec=c[st.k];
+        return `<div class="btc-etf">
+          <div class="btc-etf-top">
+            <span class="btc-etf-name">${c.name}</span>
+            <span class="pb-action a-${rec.a}">${BAL[rec.a]}</span>
+          </div>
+          <p class="btc-etf-why">${rec.w}</p>
+          <div class="pb-tickers">${c.tickers.map(t=>`<a class="src" href="${YQ(t)}" target="_blank" rel="noopener">${t}</a>`).join("")}</div>
+        </div>`;
+      }).join("")}
+      ${b?`<div class="btc-ai"><span class="mono">AI market check · ${b.at}</span><br>BTC ${escapeHtml(String(b.price||""))} · ${escapeHtml(String(b.note||""))}</div>`
+         :`<div class="btc-ai"><span class="mono">Run AI update for live price, drawdown & marker readings</span></div>`}
+      <p class="btc-note">Descriptive mapping of consensus cycle markers to example instruments — not personalised advice. Marker thresholds compress as the market matures and gave muted signals last cycle. Leveraged and inverse ETFs reset daily: volatility drag makes them trading tools, never long-term holds. Proxy stocks add company-specific risk (dilution, debt, energy costs, NAV premium) on top of BTC risk — they are equities that correlate, not Bitcoin.</p>
+    </div>`;
+}
+function btcPrompt(){
+  const today=new Date().toISOString().slice(0,10);
+  return `Today is ${today}. Use web search for current Bitcoin market data, then score these cycle markers. If a marker's current value cannot be found, use "n/a" with zone "neutral". Be evenhanded — "neutral" is the default unless evidence clearly puts it in a zone.
+- mvrv: MVRV Z-Score (buy zone <1, sell zone >2.5)
+- nupl: NUPL (buy <0, sell >0.75)
+- ma200w: price relative to the 200-week moving average (buy if at/below or within ~15% above it; sell only if extremely stretched)
+- pi: Pi Cycle Top (sell only if the 111-day MA is above 2× the 350-day MA; otherwise neutral)
+- rsi: weekly RSI (buy <30, sell >70)
+- fg: Fear & Greed Index (buy <25, sell >75)
+
+Respond with ONLY a JSON object, no preamble, no markdown fences:
+{"price":"<current BTC price in USD, concrete figure>","note":"<max 22 words: drawdown % from the Oct 2025 ~$126k all-time high plus one cycle-relevant current fact>","phase":"<one of: accumulation|expansion|euphoria|correction>","markers":{"mvrv":{"v":"<figure or n/a>","z":"buy|neutral|sell"},"nupl":{"v":"...","z":"..."},"ma200w":{"v":"...","z":"..."},"pi":{"v":"...","z":"..."},"rsi":{"v":"...","z":"..."},"fg":{"v":"...","z":"..."}}}
+Include all six marker ids.`;
+}
+
+/* ---------- AI research desk ---------- */
+let running=false;
+
+const KEYSTORE="summit-watch-apikey";
+const ECONSTORE="summit-watch-econ";
+function apiKey(){try{return localStorage.getItem(KEYSTORE)||"";}catch(e){return"";}}
+function econOn(){try{return localStorage.getItem(ECONSTORE)==="1";}catch(e){return false;}}
+function modelName(){return(!hasCloud()&&econOn())?"claude-haiku-4-5-20251001":"claude-sonnet-4-6";}
+function keyUiInit(){
+  if(hasCloud())return; // inside Claude the runtime handles auth — no key UI needed
+  const t=document.getElementById("keyToggle");
+  t.hidden=false;
+  const chk=document.getElementById("econChk");
+  chk.checked=econOn();
+  chk.addEventListener("change",()=>{try{localStorage.setItem(ECONSTORE,chk.checked?"1":"0");}catch(e){}});
+  t.addEventListener("click",()=>{
+    const r=document.getElementById("keyRow");
+    r.hidden=!r.hidden;
+    document.getElementById("keyHint").textContent=apiKey()
+      ?"A key is saved in this browser."
+      :"Create a key at console.anthropic.com and set a low monthly spend limit. It stays in this browser only — it is never baked into shared copies.";
+  });
+  document.getElementById("keySave").addEventListener("click",()=>{
+    const v=document.getElementById("keyInput").value.trim();
+    if(!v){document.getElementById("keyHint").textContent="Paste a key first.";return;}
+    try{localStorage.setItem(KEYSTORE,v);}catch(e){}
+    document.getElementById("keyInput").value="";
+    document.getElementById("keyHint").textContent="Saved in this browser.";
+  });
+  document.getElementById("keyClear").addEventListener("click",()=>{
+    try{localStorage.removeItem(KEYSTORE);}catch(e){}
+    document.getElementById("keyHint").textContent="Key removed.";
+  });
+}
+
+function setUpdateStatus(msg){document.getElementById("updateStatus").textContent=msg;}
+
+async function askClaude(prompt,maxSearches){
+  const headers={"Content-Type":"application/json"};
+  if(!hasCloud()){
+    const k=apiKey();
+    if(!k) throw new Error("NOKEY");
+    headers["x-api-key"]=k;
+    headers["anthropic-version"]="2023-06-01";
+    headers["anthropic-dangerous-direct-browser-access"]="true";
+  }
+  const response=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:headers,
+    body:JSON.stringify({
+      model:modelName(),
+      max_tokens:1000,
+      messages:[{role:"user",content:prompt}],
+      tools:[{type:"web_search_20250305",name:"web_search",max_uses:maxSearches||5}]
+    })
+  });
+  if(!response.ok) throw new Error("API "+response.status);
+  const data=await response.json();
+  const text=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+  const clean=text.replace(/```json|```/g,"").trim();
+  const start=clean.indexOf("{");
+  const end=clean.lastIndexOf("}");
+  if(start===-1||end===-1) throw new Error("No JSON in reply");
+  return JSON.parse(clean.slice(start,end+1));
+}
+
+function stagePrompt(st){
+  const today=new Date().toISOString().slice(0,10);
+  const list=st.signs.map(s=>`- id "${s.id}": ${s.name}. Watch for: ${s.watch}`).join("\n");
+  return `Today is ${today}. You are assessing warning signs from Akhil Patel's 18-year real estate cycle framework, stage "${st.name}". Use web search to check CURRENT conditions (US primarily, global where the sign is global). For each sign decide: "none" (not present), "emerging" (partial/early evidence), or "confirmed" (clearly present now).
+
+Signs:
+${list}
+
+Be efficient: you have a small search budget, so batch related signs into shared queries rather than searching per sign.
+
+Respond with ONLY a JSON object, no preamble, no markdown fences, in exactly this shape:
+{"<id>":{"v":"none|emerging|confirmed","s":"<summary of current evidence, max 25 words, include a concrete figure or date if possible>"}, ...}
+Include every id listed. Be evenhanded: mark "none" when evidence is weak.`;
+}
+
+function storeAi(id,v,s){
+  const g=getSign(id);
+  const verdict=["none","emerging","confirmed"].includes(v)?v:"none";
+  g.ai={at:new Date().toISOString().slice(0,10),v:verdict,s:String(s||"").slice(0,400)};
+  g.status=verdict; // single-run update: the AI sweep sets each condition directly
+}
+
+/* Progress tracking: real milestones at each completed stage, with a gentle
+   creep between them so long searches feel alive. Numbers snap to truth on
+   every stage completion. */
+let shownPct=0,creepTimer=null;
+function setPct(p){
+  shownPct=Math.max(shownPct,Math.min(100,p));
+  document.getElementById("aiProgressFill").style.width=shownPct+"%";
+  document.getElementById("aiPct").textContent=Math.round(shownPct)+"%";
+}
+function startCreep(toPct){
+  clearInterval(creepTimer);
+  creepTimer=setInterval(()=>{
+    if(shownPct<toPct-2) setPct(shownPct+0.7);
+  },450);
+}
+function stopCreep(){clearInterval(creepTimer);creepTimer=null;}
+function showProgress(on){
+  const el=document.getElementById("aiProgress");
+  el.classList.toggle("active",on);
+  el.setAttribute("aria-hidden",on?"false":"true");
+  if(on){shownPct=0;setPct(0);}
+}
+
+async function runAllUpdates(){
+  if(running)return;
+  if(!hasCloud()&&!apiKey()){
+    setUpdateStatus("Outside Claude: add an Anthropic API key (⚿) to run updates");
+    document.getElementById("keyRow").hidden=false;
+    return;
+  }
+  running=true;
+  const btn=document.getElementById("runUpdate");
+  btn.disabled=true;
+  const totalSigns=STAGES.reduce((a,st)=>a+st.signs.length,0);
+  const totalUnits=totalSigns+6; // + market-context + BTC steps
+  let doneUnits=0;
+  showProgress(true);
+  try{
+    for(let i=0;i<STAGES.length;i++){
+      const st=STAGES[i];
+      const segEnd=100*(doneUnits+st.signs.length)/totalUnits;
+      setUpdateStatus(`Researching ${st.name.split("·")[1].trim()}… ${doneUnits}/${totalSigns} signs done`);
+      startCreep(segEnd);
+      const result=await askClaude(stagePrompt(st),5);
+      stopCreep();
+      st.signs.forEach(s=>{ if(result[s.id]) storeAi(s.id,result[s.id].v,result[s.id].s); });
+      doneUnits+=st.signs.length;
+      setPct(100*doneUnits/totalUnits);
+      scheduleSave();render();
+    }
+    setUpdateStatus(`Researching market context for the playbook…`);
+    startCreep(99);
+    try{
+      const ctx=await askClaude(playbookPrompt(),3);
+      const notes={};
+      PLAYBOOK.forEach(c=>{ if(ctx[c.id]) notes[c.id]=String(ctx[c.id]).slice(0,220); });
+      state._pb={at:new Date().toISOString().slice(0,10),notes};
+    }catch(e){ /* playbook context is best-effort; sign updates already applied */ }
+    stopCreep();
+    setPct(100*(totalSigns+4)/totalUnits);
+    setUpdateStatus(`Checking the Bitcoin cycle…`);
+    startCreep(99);
+    try{
+      const btc=await askClaude(btcPrompt(),3);
+      const mk={};
+      BTC_MARKERS.forEach(x=>{
+        const r=btc.markers&&btc.markers[x.id]?btc.markers[x.id]:null;
+        mk[x.id]={v:String(r&&r.v!=null?r.v:"n/a").slice(0,24),
+                  z:["buy","neutral","sell"].includes(r&&r.z)?r.z:"neutral"};
+      });
+      state._btc={at:new Date().toISOString().slice(0,10),
+        price:String(btc.price||"").slice(0,40),
+        note:String(btc.note||"").slice(0,220),
+        phase:["accumulation","expansion","euphoria","correction"].includes(btc.phase)?btc.phase:null,
+        markers:mk};
+    }catch(e){ /* BTC check is best-effort */ }
+    stopCreep();
+    setPct(100);
+    scheduleSave();render();
+    setUpdateStatus(`AI update complete · ${totalSigns}/${totalSigns} signs + playbook + BTC · `+new Date().toLocaleDateString());
+    setTimeout(()=>showProgress(false),2500);
+  }catch(e){
+    stopCreep();
+    showProgress(false);
+    if(e&&e.message==="NOKEY"){
+      setUpdateStatus("Outside Claude: add an Anthropic API key (⚿) to run updates");
+      document.getElementById("keyRow").hidden=false;
+    }else{
+      setUpdateStatus(hasCloud()
+        ?"AI update failed — try again in a moment"
+        :"AI update failed — check the key, its spend limit, and your network");
+    }
+  }
+  btn.disabled=false;
+  running=false;
+}
+
+document.getElementById("runUpdate").addEventListener("click",runAllUpdates);
+
+
+document.getElementById("resetBtn").addEventListener("click",async()=>{
+  if(!confirm("Clear every status and note?"))return;
+  state={};
+  try{
+    if(hasCloud()) await window.storage.set(KEY,JSON.stringify(state));
+    else localStorage.setItem(KEY,JSON.stringify(state));
+  }catch(e){}
+  render();flash("Reset");
+});
+
+/* ---------- Export / import ---------- */
+const VALID_STATUS=["none","emerging","confirmed"];
+function sanitizeState(raw){
+  if(!raw||typeof raw!=="object"||Array.isArray(raw)) throw new Error("Not a state object");
+  const out={};
+  const dateish=s=>String(s||"").replace(/[^0-9\-]/g,"").slice(0,10);
+  Object.keys(raw).forEach(k=>{
+    const v=raw[k];
+    if(k==="_pb"&&v&&typeof v==="object"){
+      const notes={};
+      if(v.notes&&typeof v.notes==="object") Object.keys(v.notes).forEach(id=>{notes[String(id).slice(0,24)]=String(v.notes[id]).slice(0,220);});
+      out._pb={at:dateish(v.at),notes};
+    }else if(k==="_btc"&&v&&typeof v==="object"){
+      const mk={};
+      if(v.markers&&typeof v.markers==="object") Object.keys(v.markers).forEach(id=>{
+        const m=v.markers[id]||{};
+        mk[String(id).slice(0,12)]={v:String(m.v||"n/a").slice(0,24),z:["buy","neutral","sell"].includes(m.z)?m.z:"neutral"};
+      });
+      out._btc={at:dateish(v.at),price:String(v.price||"").slice(0,40),note:String(v.note||"").slice(0,220),
+        phase:["accumulation","expansion","euphoria","correction"].includes(v.phase)?v.phase:null,markers:mk};
+    }else if(v&&typeof v==="object"&&!String(k).startsWith("_")){
+      const e={status:VALID_STATUS.includes(v.status)?v.status:"none",note:String(v.note||"").slice(0,4000)};
+      if(v.ai&&typeof v.ai==="object"){
+        e.ai={at:dateish(v.ai.at),v:VALID_STATUS.includes(v.ai.v)?v.ai.v:"none",s:String(v.ai.s||"").slice(0,400)};
+      }
+      out[String(k).slice(0,24)]=e;
+    }
+  });
+  return out;
+}
+const ioPanel=document.getElementById("ioPanel"),ioText=document.getElementById("ioText"),ioHint=document.getElementById("ioHint");
+let ioMode=null;
+function openIo(mode){
+  ioMode=mode;
+  ioPanel.classList.add("open");
+  if(mode==="export"){
+    ioText.value=JSON.stringify(state);
+    ioText.focus();ioText.select();
+    ioHint.textContent="Copy this blob and send it. Recipient: Import data → paste → Apply.";
+    try{navigator.clipboard.writeText(ioText.value).then(()=>flash("Copied to clipboard"),()=>{});}catch(e){}
+  }else{
+    ioText.value="";
+    ioText.placeholder="Paste an exported data blob here, then Apply import.";
+    ioText.focus();
+    ioHint.textContent="Replaces everything currently saved in this copy.";
+  }
+}
+document.getElementById("exportBtn").addEventListener("click",()=>openIo("export"));
+document.getElementById("importBtn").addEventListener("click",()=>openIo("import"));
+document.getElementById("ioClose").addEventListener("click",()=>{ioPanel.classList.remove("open");ioMode=null;});
+document.getElementById("ioApply").addEventListener("click",async()=>{
+  if(ioMode!=="import"){flash("Open Import data first");return;}
+  let parsed;
+  try{parsed=sanitizeState(JSON.parse(ioText.value));}
+  catch(e){ioHint.textContent="Couldn't parse that — paste the exact exported blob.";return;}
+  if(Object.keys(state).length&&!confirm("Replace your saved data with the imported set?"))return;
+  state=parsed;
+  try{
+    if(hasCloud()) await window.storage.set(KEY,JSON.stringify(state));
+    else localStorage.setItem(KEY,JSON.stringify(state));
+  }catch(e){}
+  ioPanel.classList.remove("open");ioMode=null;
+  render();flash("Imported");
+});
+
+document.getElementById("shareBtn").addEventListener("click",()=>{
+  const ms="/*SEED-"+"START*/", me="/*SEED-"+"END*/"; // split so these lines never match themselves
+  const doc="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+  const a=doc.indexOf(ms), b=doc.indexOf(me);
+  if(a===-1||b===-1||b<a){flash("Couldn't build seeded copy");return;}
+  const json=JSON.stringify(state).replace(/</g,"\\u003c");
+  const out=doc.slice(0,a)+ms+json+me+doc.slice(b+me.length);
+  let downloaded=false;
+  try{
+    const blob=new Blob([out],{type:"text/html"});
+    const u=URL.createObjectURL(blob);
+    const aEl=document.createElement("a");
+    aEl.href=u;aEl.download="summit-watch-shared.html";
+    document.body.appendChild(aEl);aEl.click();aEl.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),4000);
+    downloaded=true;
+  }catch(e){}
+  ioMode=null;
+  ioPanel.classList.add("open");
+  ioText.value=out;
+  ioHint.textContent=downloaded
+    ?"Downloaded summit-watch-shared.html with your data baked in. (Full HTML also shown here as backup.)"
+    :"Download was blocked here — copy everything in this box and save it as summit-watch-shared.html.";
+  flash(downloaded?"Seeded copy built":"Copy the HTML below");
+});
+
+keyUiInit();
+load();
+</script>
+</body>
+</html>
