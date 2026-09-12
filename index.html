@@ -258,6 +258,49 @@
   .seqnote b{font-family:'Courier New',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
   .seqnote[hidden]{display:none}
 
+  /* v3: shopping list - what the current mode says to buy, and how discounted it is */
+  .shop{border:1px solid var(--rule);background:var(--white);padding:13px 16px 12px;margin:-16px 0 34px}
+  .shop[hidden]{display:none}
+  .shop-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;margin-bottom:4px}
+  .shop-title{font-family:'Courier New',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ledger);font-weight:700}
+  .shop-mode{font-family:'Courier New',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--white);background:var(--ledger-soft);padding:1px 7px}
+  .shop-at{font-family:'Courier New',monospace;font-size:11px;color:var(--quiet);margin-left:auto}
+  .shop-intro{font-size:12.5px;color:#4A4A3F;margin-bottom:10px;max-width:92ch}
+  .shop-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+  .shop-tbl th{font-family:'Courier New',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--quiet);text-align:left;font-weight:400;padding:0 8px 5px 0;border-bottom:1px solid var(--rule)}
+  .shop-tbl td{padding:7px 8px 7px 0;border-bottom:1px dotted var(--rule);vertical-align:middle}
+  .shop-tbl tr:last-child td{border-bottom:none}
+  .shop-tkr{font-family:'Courier New',monospace;font-weight:700;color:var(--ledger);font-size:13px}
+  .shop-cat{display:block;font-family:'Courier New',monospace;font-size:9px;color:var(--quiet);text-transform:uppercase;letter-spacing:.06em}
+  .shop-px{font-family:'Courier New',monospace;white-space:nowrap}
+  .shop-ytd{font-family:'Courier New',monospace;font-size:11.5px;white-space:nowrap}
+  .shop-up{color:var(--ledger-soft)}
+  .shop-dn{color:var(--stamp)}
+  .shop-disc{min-width:116px}
+  .shop-bar{display:block;position:relative;height:9px;background:var(--paper-deep);border:1px solid var(--rule);width:100%;max-width:104px}
+  .shop-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--stamp);opacity:.62}
+  .shop-bar.deep i{opacity:.85}
+  .shop-off{font-family:'Courier New',monospace;font-size:11px;font-weight:700;color:var(--stamp);display:block;margin-bottom:2px}
+  .shop-off.flat{color:var(--quiet);font-weight:400}
+  .shop-tr{font-family:'Courier New',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border:1px solid;white-space:nowrap}
+  .tr-rising{color:var(--ledger-soft);border-color:var(--ledger-soft);background:rgba(46,83,64,.09)}
+  .tr-falling{color:var(--stamp);border-color:var(--stamp);background:rgba(168,50,42,.09)}
+  .tr-basing{color:var(--amber);border-color:var(--amber);background:rgba(169,123,31,.09)}
+  .shop-read{font-size:12px;color:#4A4A3F}
+  .shop-read b{font-family:'Courier New',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+  .shop-read b.k-go{color:var(--ledger-soft)}
+  .shop-read b.k-wait{color:var(--stamp)}
+  .shop-read b.k-watch{color:var(--amber)}
+  .shop-note{display:block;color:var(--quiet);font-size:11.5px;margin-top:2px}
+  .shop-foot{font-family:'Courier New',monospace;font-size:11px;color:#4A4A3F;margin-top:9px;border-top:1px dashed var(--rule);padding-top:7px}
+  .shop-empty{font-size:12.5px;color:var(--quiet);padding:6px 0}
+  @media (max-width:640px){
+    .shop-tbl thead{display:none}
+    .shop-tbl td{display:block;border-bottom:none;padding:2px 0}
+    .shop-tbl tbody tr{display:block;border-bottom:1px dotted var(--rule);padding:9px 0}
+    .shop-bar{max-width:100%}
+  }
+
   /* v2: threshold line on cards */
   .sign-thr{font-size:12px;color:var(--ledger);margin-top:6px;max-width:88ch;border-left:3px solid var(--ledger-soft);padding-left:8px}
   .sign-thr b{font-family:'Courier New',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
@@ -361,6 +404,7 @@
     <div class="traj-vel" id="trajVel"></div>
   </section>
   <div class="seqnote" id="seqNote" hidden></div>
+  <section class="shop" id="shoplist" hidden aria-label="Shopping list: current buy bucket and discounts"></section>
   <div class="mid-grid">
     <section class="playbook" id="playbook"></section>
     <aside class="btcdesk" id="btcdesk" aria-label="Bitcoin 4-year cycle tracker"></aside>
@@ -408,7 +452,7 @@
 <div class="savebar mono" id="savebar">Saved</div>
 
 <script>
-const SEED=/*SEED-START*/{"lb1":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Oracle Sept 11 backlog $664B and BIS railway-mania framing sustain the new-era narrative; EY Sept 4 calls AI a winner-takes-all productivity boom."}},"lb2":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Falsifier untriggered: Oracle RPO $664B Sept 10 versus $638B June, plus $30B of new contracts; OCI revenue up 121% y/y."}},"lb3":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Data-center capex still surging, but FRED public construction $543.4B, only +1.7% y/y nominal, under 3.4% CPI: infrastructure contracting in real terms."}},"lb4":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"FHFA Q2 +2.1% y/y; Alaska +8.3%, Illinois +5.6%, Elgin IL +7.7% top metro versus Everett WA -3.7%. No new release this week."}},"lb5":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"July 2026 SLOOS (Q2) resi standards basically unchanged, no easing streak; H.8 resi loans $2,702.6B, +1.65% y/y, under income +3.7%."}},"lb6":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Texas and Virginia data-center subsidies each exceed $1B yearly; but 2026 rollback is real, 8 of 25 repeal bills passed, Maine repealed all."}},"lb7":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"CAPE 41.09 Sept 11, about the 98th percentile; S&P 7,656.98, +11.9% YTD. But no record close since Aug 13's 7,798.99, now 30 days."}},"lb8":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"BIS Q1 global real -1.2%, advanced -0.2%; Australia -0.9% m/m August, fifth straight fall; UK Nationwide +1.6%. Downgrade fence holds."}},"lb9":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"AAII week to Sept 9: bears 39.3% retake the lead over bulls 38.0%, the downgrade trigger; Fear and Greed about 31, down from 42."}},"m1":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"ROAD to Housing Act (law July 11 2026) NEPA exclusions plus $200B GSE MBS; FHFA credit-score deregulation announced Sept 4."}},"m2":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"H1 2026 private credit closes $190B, +53% y/y; Arini $4B debut fund nearing close Sept 10; $15.6B of BDC redemptions gated."}},"m3":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"July starts 1.239M, -13.5% y/y and -12.4% m/m, triggering the downgrade; permits 1.433M +2.4%; AUTHNOTT backlog 277.9K, +11.4%."}},"m4":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"July margin debt $1.417T = 4.36% of GDP, +38.6% y/y, but -5.7% m/m off June's record $1.502T; 0DTE 66.2% of SPX volume."}},"m5":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Jeddah Tower 113 floors Sept 2, 67% of concrete placed, 1,008m target, 2028 completion. No new record tower announced."}},"m6":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"August CPI 3.40% y/y versus July 3.36% ends the deceleration from May's 4.25%; m/m +0.4% on gasoline. Fed still on hold."}},"m7":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"Sept 11: 10y-2y +33bp, 10y-3m +89bp; 10y hit 4.95% Sept 10, 2y 4.56%. Positively sloped all year, no inversion."}},"m8":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"Latest remains ATTOM Q1 2026: 64,348 flips, 8% of sales versus 8.2% y/y, ROI 25.4%. Q2 report still unpublished."}},"m9":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Monterey record $755.6M stands, $42.9M Shelby Cobra; Christie's H1 $4.5B, Heritage $1.4B +47%. No new record Sept 5-12."}},"s1":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Yardeni raised its target to 8,400 on earnings-led melt-up talk; Street targets pushed past 8,000 Sept 9. S&P 7,656.98, VIX 15.84."}},"s2":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"Aug payrolls +162K versus 53K expected, U3 4.1%, June and July revised up a combined 55K; ISM 54.6/55.4. But 12-month average 31K."}},"s3":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"July retail sales +5.0% y/y, 3-month +0.6%; core capex orders +12.6% y/y, 3-month +3.6%. Both legs positive, threshold unmet."}},"s4":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"H.8 through Sept 2: bank credit $19,835B, +6.1% y/y and 5.3% annualized over three months; both above the 5% downgrade fence."}},"s5":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"NAR August existing sales 3.98M, -1.2% y/y (first negative) and -2.0% m/m, 4.9 months supply; new homes -6.3% y/y at 9.6 months."}},"s6":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"Both builders now negative YTD: ITB -7.0%, XHB -4.4% versus S&P +11.9%. But no index record since Aug 13, so the second leg is unmet."}},"s7":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"July nonres construction $1,286B, -1.25% y/y though up four straight months; residential $871B, -7.3% y/y. Divergence real, boom absent."}},"s8":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"No hike yet; FOMC Sept 15-16. August CPI doubled the odds: CME FedWatch 86% Sept 11, Polymarket 79% Sept 12, from roughly 50%."}},"s9":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Insiders sold $77.6B H1 2026, +20% y/y, versus $6.9B bought = 11:1, most intense since 2021; oil above $100, 30-year yield 19-year high."}},"s10":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Bessent says no work shows a systemic problem; SEC's Atkins says not a systemic risk; Treasury doubling long-bond buybacks from Sept 9."}},"_pb":{"at":"2026-09-12","notes":{"broad":"S&P 7,656.98 Sept 11, +11.9% YTD; forward P/E about 19.5; no record close since Aug 13's 7,798.99, now 30 days","moat":"QQQ $714.88 Sept 11, +16.4% YTD from a 614.31 base, 4.5% under its $748.65 52-week high","restocks":"VNQ +7.1% YTD; both builders now negative - ITB -7.0%, XHB -4.4% - versus S&P +11.9%","banks":"XLF $57.25, +4.5% YTD, 2.3% off its 52-week high; KBE +12.1% YTD and 5.4% off","property":"Freddie Mac 30-year 6.76% Sept 10; August existing sales 3.98M SAAR, -1.2% y/y, median $429,100","commod":"WTI $100.05 Sept 11, +9.7% on the week and back over $100; copper $6.47/lb, 5% under its record","gold":"Spot gold $4,385 Sept 11, -2.4% on the week, about 22% below January's $5,608 peak","bonds":"10-year 4.95% and 2-year 4.56% Sept 10 after hot CPI; the 10y-2y spread narrowed to +33bp Sept 11","cash":"Fed on hold 3.50-3.75%, effective 3.63%; dollar index 99.1; Sept 16 hike odds now 79-86%","collect":"No new record Sept 5-12; Heritage H1 2026 $1.4B, +47% y/y; Monterey's $755.6M still stands"}},"_btc":{"at":"2026-09-12","price":"$77,400","phase":"expansion","note":"BTC fell to $77.4k (-3% on the week), hitting $76.8k Friday before August CPI at 3.4% sparked a bounce past $79k. Sept 16 hike odds jumped to about 85%; ETFs bled $147M in two days.","markers":{"mvrv":{"v":"Z 0.81; MVRV 1.47","z":"buy"},"nupl":{"v":"0.32; below 365dMA","z":"neutral"},"ma200w":{"v":"+19% vs $64.9k MA","z":"neutral"},"pi":{"v":"Not triggered; -58%","z":"buy"},"rsi":{"v":"D 51 (pk 86); W 55","z":"neutral"},"fg":{"v":"63 Greed (was 73)","z":"neutral"}}},"_land":{"at":"2026-09-12","yoy":"Listed land -0.5% y/y, median $62,365/acre (Realtor.com Q1 2026; still no Q2 print as of Sep 12 - two quarters stale)","share":"39.9% of home value (FHFA Davis-Larson-Oliner-Shui; 2022 data, dataset Jun 2024 - a four-year-old vintage)","farm":"Record $4,500/acre, +3.4% y/y; cropland $6,020 +3.3%, pasture $2,000 +4.2% (USDA Jul 31 2026; annual series)","note":"Land still lags houses: listed land -0.5% y/y (Q1 2026) versus FHFA +2.1% y/y Q2 and Case-Shiller +1.5% y/y June. Land is the only one outright negative, and on the stalest vintage."},"_liq":{"at":"2026-09-12","fed":"WALCL $6.741T (Sep 9, H.4.1 rel. Sep 10): +$3B w/w, -$19B over 4wks, still inside the $6.73-6.76T band, +$135B (+2.0%) y/y","tga":"$843.7B (Sep 9 Wednesday level, WDTGAL): -$101B w/w, a sharp drawdown; -$116B over 4wks, +$176B y/y","rrp":"ON RRP $0.4B (Sep 9), $5.3B by Sep 11 off the floor; foreign official $349.2B of the $349.7B H.4.1 line = 99.9%","net":"expanding","note":"Net $5.896T (Sep 9): +$104B w/w and +$97B over 4wks, both on the TGA drawdown; breaks the 5-week $5.77-5.82T band, so expanding, though still -0.2% y/y. Buybacks doubled Sep 9; TGA rebuild is the risk."},"_hist":[{"d":"2026-08-08","g":64,"lb":6.0,"ma":5.5,"su":6.5},{"d":"2026-08-16","g":60,"lb":6.0,"ma":5.0,"su":6.0},{"d":"2026-08-20","g":60,"lb":6.0,"ma":5.0,"su":6.0},{"d":"2026-08-24","g":53,"lb":6.0,"ma":4.5,"su":5.0},{"d":"2026-08-30","g":57,"lb":6.0,"ma":5.0,"su":5.5},{"d":"2026-09-05","g":60,"lb":6.0,"ma":5,"su":6.0},{"d":"2026-09-12","g":64,"lb":6.0,"ma":5.5,"su":6.5}]}/*SEED-END*/;
+const SEED=/*SEED-START*/{"lb1":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Oracle Sept 11 backlog $664B and BIS railway-mania framing sustain the new-era narrative; EY Sept 4 calls AI a winner-takes-all productivity boom."}},"lb2":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Falsifier untriggered: Oracle RPO $664B Sept 10 versus $638B June, plus $30B of new contracts; OCI revenue up 121% y/y."}},"lb3":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Data-center capex still surging, but FRED public construction $543.4B, only +1.7% y/y nominal, under 3.4% CPI: infrastructure contracting in real terms."}},"lb4":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"FHFA Q2 +2.1% y/y; Alaska +8.3%, Illinois +5.6%, Elgin IL +7.7% top metro versus Everett WA -3.7%. No new release this week."}},"lb5":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"July 2026 SLOOS (Q2) resi standards basically unchanged, no easing streak; H.8 resi loans $2,702.6B, +1.65% y/y, under income +3.7%."}},"lb6":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Texas and Virginia data-center subsidies each exceed $1B yearly; but 2026 rollback is real, 8 of 25 repeal bills passed, Maine repealed all."}},"lb7":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"CAPE 41.09 Sept 11, about the 98th percentile; S&P 7,656.98, +11.9% YTD. But no record close since Aug 13's 7,798.99, now 30 days."}},"lb8":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"BIS Q1 global real -1.2%, advanced -0.2%; Australia -0.9% m/m August, fifth straight fall; UK Nationwide +1.6%. Downgrade fence holds."}},"lb9":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"AAII week to Sept 9: bears 39.3% retake the lead over bulls 38.0%, the downgrade trigger; Fear and Greed about 31, down from 42."}},"m1":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"ROAD to Housing Act (law July 11 2026) NEPA exclusions plus $200B GSE MBS; FHFA credit-score deregulation announced Sept 4."}},"m2":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"H1 2026 private credit closes $190B, +53% y/y; Arini $4B debut fund nearing close Sept 10; $15.6B of BDC redemptions gated."}},"m3":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"July starts 1.239M, -13.5% y/y and -12.4% m/m, triggering the downgrade; permits 1.433M +2.4%; AUTHNOTT backlog 277.9K, +11.4%."}},"m4":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"July margin debt $1.417T = 4.36% of GDP, +38.6% y/y, but -5.7% m/m off June's record $1.502T; 0DTE 66.2% of SPX volume."}},"m5":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Jeddah Tower 113 floors Sept 2, 67% of concrete placed, 1,008m target, 2028 completion. No new record tower announced."}},"m6":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"August CPI 3.40% y/y versus July 3.36% ends the deceleration from May's 4.25%; m/m +0.4% on gasoline. Fed still on hold."}},"m7":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"Sept 11: 10y-2y +33bp, 10y-3m +89bp; 10y hit 4.95% Sept 10, 2y 4.56%. Positively sloped all year, no inversion."}},"m8":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"Latest remains ATTOM Q1 2026: 64,348 flips, 8% of sales versus 8.2% y/y, ROI 25.4%. Q2 report still unpublished."}},"m9":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Monterey record $755.6M stands, $42.9M Shelby Cobra; Christie's H1 $4.5B, Heritage $1.4B +47%. No new record Sept 5-12."}},"s1":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Yardeni raised its target to 8,400 on earnings-led melt-up talk; Street targets pushed past 8,000 Sept 9. S&P 7,656.98, VIX 15.84."}},"s2":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"Aug payrolls +162K versus 53K expected, U3 4.1%, June and July revised up a combined 55K; ISM 54.6/55.4. But 12-month average 31K."}},"s3":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"July retail sales +5.0% y/y, 3-month +0.6%; core capex orders +12.6% y/y, 3-month +3.6%. Both legs positive, threshold unmet."}},"s4":{"status":"none","note":"","ai":{"at":"2026-09-12","v":"none","s":"H.8 through Sept 2: bank credit $19,835B, +6.1% y/y and 5.3% annualized over three months; both above the 5% downgrade fence."}},"s5":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"NAR August existing sales 3.98M, -1.2% y/y (first negative) and -2.0% m/m, 4.9 months supply; new homes -6.3% y/y at 9.6 months."}},"s6":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"Both builders now negative YTD: ITB -7.0%, XHB -4.4% versus S&P +11.9%. But no index record since Aug 13, so the second leg is unmet."}},"s7":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"July nonres construction $1,286B, -1.25% y/y though up four straight months; residential $871B, -7.3% y/y. Divergence real, boom absent."}},"s8":{"status":"emerging","note":"","ai":{"at":"2026-09-12","v":"emerging","s":"No hike yet; FOMC Sept 15-16. August CPI doubled the odds: CME FedWatch 86% Sept 11, Polymarket 79% Sept 12, from roughly 50%."}},"s9":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Insiders sold $77.6B H1 2026, +20% y/y, versus $6.9B bought = 11:1, most intense since 2021; oil above $100, 30-year yield 19-year high."}},"s10":{"status":"confirmed","note":"","ai":{"at":"2026-09-12","v":"confirmed","s":"Bessent says no work shows a systemic problem; SEC's Atkins says not a systemic risk; Treasury doubling long-bond buybacks from Sept 9."}},"_px":{"at":"2026-09-11","t":{"SPY":{"p":"$764.29","ytd":12.1,"off":-1.7,"tr":"basing","n":"Broad index +12.1% YTD but no record close since Aug 13, now 30 days."},"VTI":{"p":"$376.31","ytd":12.2,"off":-2.1,"tr":"basing","n":"Total market, tracks SPY closely; same stalled-record picture."},"QQQ":{"p":"$714.88","ytd":16.4,"off":-4.2,"tr":"basing","n":"+16.4% YTD, 4.2% under its high; the AI trade still leads the index."},"PAVE":{"p":"$54.08","ytd":13.2,"off":-9.9,"tr":"falling","n":"Infrastructure fund falling; public construction is contracting in real terms, +1.7% nominal vs 3.4% CPI."},"GNR":{"p":"$78.59","ytd":26.5,"off":-1.6,"tr":"rising","n":"Natural resources at its 52-week high, riding the commodity run."},"VNQ":{"p":"$94.80","ytd":7.1,"off":-6.1,"tr":"falling","n":"REITs drifting lower with the 30-year mortgage at 6.76%."},"ITB":{"p":"$89.54","ytd":-7.0,"off":-23.6,"tr":"falling","n":"Homebuilders 23.6% off their high and still falling - this is the S-06 divergence itself."},"XHB":{"p":"$98.46","ytd":-4.4,"off":-18.9,"tr":"falling","n":"Builders 18.9% off the high; flipped negative YTD this month."},"XLF":{"p":"$57.25","ytd":4.5,"off":-2.2,"tr":"basing","n":"Banks near their high; bank credit still growing 6.1% y/y."},"KBE":{"p":"$68.04","ytd":12.1,"off":-5.1,"tr":"falling","n":"Regional banks easing off the high; watch lending growth from here."},"PDBC":{"p":"$19.79","ytd":49.4,"off":-1.3,"tr":"rising","n":"Broad commodity basket sitting at its high; WTI back over $100 this week, +9.7%."},"CPER":{"p":"$39.18","ytd":12.1,"off":-4.6,"tr":"basing","n":"Copper $6.47/lb, about 5% under its August record - the only dip in the commodity row."},"XLE":{"p":"$65.14","ytd":45.7,"off":-0.3,"tr":"rising","n":"Energy at its 52-week high on oil over $100; strongest performer on the whole playbook."},"GLD":{"p":"$398.77","ytd":0.6,"off":-19.6,"tr":"basing","n":"Round-tripped a January spike to $495.90 and is flat on the year. 0.40% expense ratio."},"SLV":{"p":"$58.12","ytd":-9.8,"off":-45.0,"tr":"basing","n":"Ran to $105.60 on Jan 28 then gave back 45%; roughly half industrial demand, so it needs growth."},"IAU":{"p":"$81.71","ytd":0.7,"off":-19.6,"tr":"basing","n":"Same spot gold as GLD in a 0.25% expense-ratio wrapper; identical drawdown, cheaper to hold."},"TLT":{"p":"$80.87","ytd":-7.2,"off":-12.2,"tr":"falling","n":"Long Treasuries falling; 10-year 4.95% with a hike priced for Sept 16. The book wants these cheap."},"IEF":{"p":"$91.01","ytd":-5.4,"off":-7.1,"tr":"falling","n":"Intermediate Treasuries drifting down with yields near cycle highs."},"SHY":{"p":"$81.37","ytd":-1.8,"off":-2.2,"tr":"basing","n":"Short Treasuries near flat; the front end reprices fastest if the hike lands."},"SGOV":{"p":"$100.52","ytd":0.1,"off":-0.2,"tr":"basing","n":"T-bill fund pinned near $100.50 by design - the return is the ~3.6% yield, not price."},"UUP":{"p":"$28.07","ytd":3.8,"off":-1.9,"tr":"basing","n":"Dollar index 99.1; hawkish Fed repricing has held the dollar near its 52-week high."},"FXY":{"p":"$59.68","ytd":1.7,"off":-5.0,"tr":"rising","n":"Yen recovering - the only safe-haven currency in this row trending up."},"FXF":{"p":"$107.90","ytd":-3.3,"off":-7.0,"tr":"basing","n":"Swiss franc drifting; negative on the year, mild discount, no clear direction."}}},"_pb":{"at":"2026-09-12","notes":{"broad":"S&P 7,656.98 Sept 11, +11.9% YTD; forward P/E about 19.5; no record close since Aug 13's 7,798.99, now 30 days","moat":"QQQ $714.88 Sept 11, +16.4% YTD from a 614.31 base, 4.5% under its $748.65 52-week high","restocks":"VNQ +7.1% YTD; both builders now negative - ITB -7.0%, XHB -4.4% - versus S&P +11.9%","banks":"XLF $57.25, +4.5% YTD, 2.3% off its 52-week high; KBE +12.1% YTD and 5.4% off","property":"Freddie Mac 30-year 6.76% Sept 10; August existing sales 3.98M SAAR, -1.2% y/y, median $429,100","commod":"WTI $100.05 Sept 11, +9.7% on the week and back over $100; copper $6.47/lb, 5% under its record","gold":"Spot gold $4,385 Sept 11, -2.4% on the week, about 22% below January's $5,608 peak","bonds":"10-year 4.95% and 2-year 4.56% Sept 10 after hot CPI; the 10y-2y spread narrowed to +33bp Sept 11","cash":"Fed on hold 3.50-3.75%, effective 3.63%; dollar index 99.1; Sept 16 hike odds now 79-86%","collect":"No new record Sept 5-12; Heritage H1 2026 $1.4B, +47% y/y; Monterey's $755.6M still stands"}},"_btc":{"at":"2026-09-12","price":"$77,400","phase":"expansion","note":"BTC fell to $77.4k (-3% on the week), hitting $76.8k Friday before August CPI at 3.4% sparked a bounce past $79k. Sept 16 hike odds jumped to about 85%; ETFs bled $147M in two days.","markers":{"mvrv":{"v":"Z 0.81; MVRV 1.47","z":"buy"},"nupl":{"v":"0.32; below 365dMA","z":"neutral"},"ma200w":{"v":"+19% vs $64.9k MA","z":"neutral"},"pi":{"v":"Not triggered; -58%","z":"buy"},"rsi":{"v":"D 51 (pk 86); W 55","z":"neutral"},"fg":{"v":"63 Greed (was 73)","z":"neutral"}}},"_land":{"at":"2026-09-12","yoy":"Listed land -0.5% y/y, median $62,365/acre (Realtor.com Q1 2026; still no Q2 print as of Sep 12 - two quarters stale)","share":"39.9% of home value (FHFA Davis-Larson-Oliner-Shui; 2022 data, dataset Jun 2024 - a four-year-old vintage)","farm":"Record $4,500/acre, +3.4% y/y; cropland $6,020 +3.3%, pasture $2,000 +4.2% (USDA Jul 31 2026; annual series)","note":"Land still lags houses: listed land -0.5% y/y (Q1 2026) versus FHFA +2.1% y/y Q2 and Case-Shiller +1.5% y/y June. Land is the only one outright negative, and on the stalest vintage."},"_liq":{"at":"2026-09-12","fed":"WALCL $6.741T (Sep 9, H.4.1 rel. Sep 10): +$3B w/w, -$19B over 4wks, still inside the $6.73-6.76T band, +$135B (+2.0%) y/y","tga":"$843.7B (Sep 9 Wednesday level, WDTGAL): -$101B w/w, a sharp drawdown; -$116B over 4wks, +$176B y/y","rrp":"ON RRP $0.4B (Sep 9), $5.3B by Sep 11 off the floor; foreign official $349.2B of the $349.7B H.4.1 line = 99.9%","net":"expanding","note":"Net $5.896T (Sep 9): +$104B w/w and +$97B over 4wks, both on the TGA drawdown; breaks the 5-week $5.77-5.82T band, so expanding, though still -0.2% y/y. Buybacks doubled Sep 9; TGA rebuild is the risk."},"_hist":[{"d":"2026-08-08","g":64,"lb":6.0,"ma":5.5,"su":6.5},{"d":"2026-08-16","g":60,"lb":6.0,"ma":5.0,"su":6.0},{"d":"2026-08-20","g":60,"lb":6.0,"ma":5.0,"su":6.0},{"d":"2026-08-24","g":53,"lb":6.0,"ma":4.5,"su":5.0},{"d":"2026-08-30","g":57,"lb":6.0,"ma":5.0,"su":5.5},{"d":"2026-09-05","g":60,"lb":6.0,"ma":5,"su":6.0},{"d":"2026-09-12","g":64,"lb":6.0,"ma":5.5,"su":6.5}]}/*SEED-END*/;
 const STAGES = [
   {
     id:"landboom",
@@ -650,7 +694,7 @@ function updateGauge(){
     </div>`;
   }).join("");
   document.getElementById("gaugeCtx").innerHTML=`The book&#39;s calendar (a 2023 forecast): <b>Summit 2026</b> &middot; measured cycles actually ran 15&ndash;20 yrs &middot; the evidence reads <b>${pct}%</b>. Where they disagree, this ledger sides with the evidence.`;
-  renderTraj();renderSeq();
+  renderTraj();renderSeq();renderShop();
 }
 
 /* v2: gauge trajectory from seeded history */
@@ -860,6 +904,75 @@ ${list}
 Respond with ONLY a JSON object, no preamble, no markdown fences:
 {"<id>":"<max 20 words of current context with a concrete figure>", ...}
 Include every id.`;
+}
+
+/* v3: shopping list - reads whatever the current gauge mode marks "buy",
+   pairs each ticker with its discount and trend, and says wait or go.
+   Re-renders automatically when the mode changes, so the Summit-mode flip to
+   bonds/cash needs no edit. */
+function shopRead(off,tr){
+  var deep=off<=-15, mid=off<=-5;
+  if(tr==="falling") return {k:"wait",t:deep?"Deep discount but still falling &mdash; no floor yet":(mid?"Slipping, discount still shallow":"Rolling over from near the highs")};
+  if(tr==="rising")  return {k:"go",  t:deep?"Discounted and turning up":(mid?"Mild discount, turning up":"Near the highs and rising &mdash; you pay up here")};
+  return {k:"watch",t:deep?"Discounted and has stopped falling":(mid?"Mild discount, drifting sideways":"Near the highs, no discount on offer")};
+}
+function renderShop(){
+  var el=document.getElementById("shoplist"); if(!el)return;
+  var px=state._px&&state._px.t?state._px.t:null;
+  if(!px||!Object.keys(px).length){el.hidden=true;return;}
+  var pct=currentPct(), mode=pbMode(pct);
+  var rows=[];
+  PLAYBOOK.forEach(function(c){
+    if(!c[mode.key]||c[mode.key].a!=="buy")return;
+    (c.tickers||[]).forEach(function(t){
+      var q=px[t[0]]; if(!q)return;
+      rows.push({tkr:t[0],url:t[1],cat:c.name,q:q});
+    });
+  });
+  if(!rows.length){
+    el.hidden=false;
+    el.innerHTML='<div class="shop-head"><span class="shop-title">Shopping list</span>'
+      +'<span class="shop-mode">'+escapeHtml(mode.label)+'</span></div>'
+      +'<p class="shop-empty">Nothing in this mode carries a buy instruction with a tradeable ticker '
+      +'&mdash; at this stage the book is telling you to reduce and hold reserves, not to shop.</p>';
+    return;
+  }
+  rows.sort(function(a,b){return a.q.off-b.q.off;});
+  var onSale=rows.filter(function(r){return r.q.off<=-15;}).length;
+  var falling=rows.filter(function(r){return r.q.tr==="falling";}).length;
+  var TRL={rising:"rising",falling:"falling",basing:"basing"};
+  el.hidden=false;
+  el.innerHTML='<div class="shop-head">'
+    +'<span class="shop-title">Shopping list</span>'
+    +'<span class="shop-mode">'+escapeHtml(mode.label)+' &middot; gauge '+pct+'%</span>'
+    +'<span class="shop-at">prices '+escapeHtml((state._px.at)||"")+'</span></div>'
+    +'<p class="shop-intro">Every ticker the playbook marks <b>buy</b> at this gauge reading, '
+    +'sorted by how far it sits below its own 52-week high. Discount depth tells you how much is '
+    +'already off; the trend tells you whether the discount is still deepening. Both matter &mdash; '
+    +'a 40% markdown that is still falling is not the same purchase as a 20% one that has stopped.</p>'
+    +'<table class="shop-tbl"><thead><tr>'
+    +'<th>Ticker</th><th>Last</th><th>YTD</th><th>Off 52wk high</th><th>Trend</th><th>Read</th>'
+    +'</tr></thead><tbody>'
+    +rows.map(function(r){
+      var q=r.q, rd=shopRead(q.off,q.tr);
+      var w=Math.max(2,Math.min(100,Math.round(Math.abs(q.off)*2)));
+      var deep=q.off<=-15;
+      return '<tr>'
+        +'<td><a class="shop-tkr" href="'+r.url+'" target="_blank" rel="noopener">'+escapeHtml(r.tkr)+'</a>'
+        +'<span class="shop-cat">'+escapeHtml(r.cat)+'</span></td>'
+        +'<td class="shop-px">'+escapeHtml(q.p)+'</td>'
+        +'<td class="shop-ytd '+(q.ytd>=0?"shop-up":"shop-dn")+'">'+(q.ytd>=0?"+":"")+q.ytd+'%</td>'
+        +'<td class="shop-disc"><span class="shop-off'+(q.off>-5?" flat":"")+'">'+q.off+'%</span>'
+        +'<span class="shop-bar'+(deep?" deep":"")+'"><i style="width:'+w+'%"></i></span></td>'
+        +'<td><span class="shop-tr tr-'+q.tr+'">'+TRL[q.tr]+'</span></td>'
+        +'<td class="shop-read"><b class="k-'+rd.k+'">'+(rd.k==="go"?"Go":rd.k==="wait"?"Wait":"Watch")+'</b> &middot; '+rd.t
+        +(q.n?'<span class="shop-note">'+escapeHtml(q.n)+'</span>':'')+'</td>'
+        +'</tr>';
+    }).join("")
+    +'</tbody></table>'
+    +'<div class="shop-foot">'+onSale+' of '+rows.length+' on the buy list are 15%+ below their high'
+    +(falling?'; '+falling+' still trending down, so the discount may not be finished':'; none is still trending down')
+    +'. Trend is mechanical: above/below the 50-day average plus the 20-day change, not a forecast.</div>';
 }
 
 /* v2: land & net-liquidity desks (populated by the weekly research seed) */
@@ -1245,6 +1358,17 @@ function sanitizeState(raw){
         phase:["accumulation","expansion","euphoria","correction"].includes(v.phase)?v.phase:null,markers:mk};
     }else if(k==="_hist"&&Array.isArray(v)){
       out._hist=v.slice(-60).map(h=>({d:dateish(h.d),g:Math.max(0,Math.min(100,Number(h.g)||0)),lb:Number(h.lb)||0,ma:Number(h.ma)||0,su:Number(h.su)||0}));
+    }else if(k==="_px"&&v&&typeof v==="object"){
+      const tk={};
+      if(v.t&&typeof v.t==="object") Object.keys(v.t).slice(0,60).forEach(id=>{
+        const q=v.t[id]||{};
+        tk[String(id).slice(0,8)]={p:String(q.p||"").slice(0,14),
+          ytd:Math.max(-100,Math.min(1000,Number(q.ytd)||0)),
+          off:Math.max(-100,Math.min(0,Number(q.off)||0)),
+          tr:["rising","falling","basing"].includes(q.tr)?q.tr:"basing",
+          n:String(q.n||"").slice(0,150)};
+      });
+      out._px={at:dateish(v.at),t:tk};
     }else if(k==="_land"&&v&&typeof v==="object"){
       out._land={at:dateish(v.at),yoy:String(v.yoy||"").slice(0,140),share:String(v.share||"").slice(0,140),farm:String(v.farm||"").slice(0,140),note:String(v.note||"").slice(0,220)};
     }else if(k==="_liq"&&v&&typeof v==="object"){
